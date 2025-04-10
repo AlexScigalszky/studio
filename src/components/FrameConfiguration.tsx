@@ -8,6 +8,7 @@ import {toast} from "@/hooks/use-toast";
 import {useRouter} from "next/navigation";
 
 interface FrameConfigurationProps {
+  onNext: () => void;
   setFrameDimensions: (dimensions: {
     width: number;
     height: number;
@@ -18,6 +19,7 @@ interface FrameConfigurationProps {
 }
 
 export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
+  onNext,
   setFrameDimensions,
   setHangerType,
 }) => {
@@ -45,7 +47,7 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
       title: "Success!",
       description: "Frame configuration saved.",
     });
-    router.push("/?tab=wall");
+    onNext()
   };
 
   return (
