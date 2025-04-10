@@ -93,7 +93,7 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
   }, [frameDimensions, wallDimensions, selectedLayout, setHolePositions]);
 
   return (
-    <div>
+    <div className="w-full h-screen">
       <p className="mb-2">
         Visual Placement Preview: Frame Dimensions - Width:{frameDimensions.width}, Height:
         {frameDimensions.height}, Depth:{frameDimensions.depth}, Wall Dimensions - Width:
@@ -101,8 +101,9 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
       </p>
       {wallDimensions.width > 0 && wallDimensions.height > 0 ? (
         <svg
-          width={wallDimensions.width}
-          height={wallDimensions.height}
+          width="100%"
+          height="100%"
+          viewBox={`0 0 ${wallDimensions.width} ${wallDimensions.height}`}
           style={{border: "1px solid #000", margin: "10px auto", display: "block"}}
         >
           {/* Wall Area */}
@@ -113,15 +114,29 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
           />
           {/* Frames */}
           {framePositions.map((pos) => (
-            <rect
-              key={pos.id}
-              x={pos.x}
-              y={pos.y}
-              width={frameDimensions.width}
-              height={frameDimensions.height}
-              fill="lightblue"
-              stroke="blue"
-            />
+            <g key={pos.id}>
+              <rect
+                x={pos.x}
+                y={pos.y}
+                width={frameDimensions.width}
+                height={frameDimensions.height}
+                fill="lightblue"
+                stroke="blue"
+              />
+              {/* Display hole position */}
+              <text
+                x={pos.x + frameDimensions.width / 2}
+                y={pos.y + frameDimensions.height / 2}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fontSize="2"
+                fill="black"
+              >
+                {/*  Hole at ({(pos.x + frameDimensions.width / 2).toFixed(1)},{(pos.y + frameDimensions.height / 2).toFixed(1)}) cm */}
+                Hole at ({(pos.x + frameDimensions.width / 2).toFixed(1)},{(pos.y + frameDimensions.height / 2).toFixed(1)})
+                cm
+              </text>
+            </g>
           ))}
         </svg>
       ) : (
