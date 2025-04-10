@@ -13,8 +13,8 @@ interface WallAreaDefinitionProps {
 export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
   setWallDimensions,
 }) => {
-  const [width, setWidth] = useState<number>(0);
-  const [height, setHeight] = useState<number>(0);
+  const [width, setWidth] = useState<number>(100);
+  const [height, setHeight] = useState<number>(100);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,6 +43,7 @@ export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
           type="number"
           id="wallWidth"
           value={width}
+          defaultValue={100}
           onChange={(e) => setWidth(Number(e.target.value))}
         />
       </div>
@@ -52,6 +53,7 @@ export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
           type="number"
           id="wallHeight"
           value={height}
+          defaultValue={100}
           onChange={(e) => setHeight(Number(e.target.value))}
         />
       </div>

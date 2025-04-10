@@ -15,9 +15,9 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
   setFrameDimensions,
   setHangerType,
 }) => {
-  const [width, setWidth] = useState<number>(0);
-  const [height, setHeight] = useState<number>(0);
-  const [depth, setDepth] = useState<number>(0);
+  const [width, setWidth] = useState<number>(10);
+  const [height, setHeight] = useState<number>(15);
+  const [depth, setDepth] = useState<number>(2);
   const [hanger, setHanger] = useState<string>("");
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -47,6 +47,7 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
           type="number"
           id="width"
           value={width}
+          defaultValue={10}
           onChange={(e) => setWidth(Number(e.target.value))}
         />
       </div>
@@ -56,6 +57,7 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
           type="number"
           id="height"
           value={height}
+          defaultValue={15}
           onChange={(e) => setHeight(Number(e.target.value))}
         />
       </div>
@@ -65,6 +67,7 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
           type="number"
           id="depth"
           value={depth}
+          defaultValue={2}
           onChange={(e) => setDepth(Number(e.target.value))}
         />
       </div>
