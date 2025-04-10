@@ -1,4 +1,4 @@
-use client";
+"use client";
 
 import {useState} from "react";
 import {Input} from "@/components/ui/input";
@@ -59,3 +59,4 @@ export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
     </form>
   );
 };
+

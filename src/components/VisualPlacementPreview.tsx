@@ -1,4 +1,4 @@
-use client";
+"use client";
 
 interface VisualPlacementPreviewProps {
   frameDimensions: { width: number; height: number; depth: number };
