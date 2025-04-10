@@ -9,6 +9,7 @@ import {useRouter} from "next/navigation";
 
 interface LayoutSelectionProps {
   setSelectedLayout: (layout: string) => void;
+  onNext: () => void;
 }
 
 export const LayoutSelection: React.FC<LayoutSelectionProps> = ({setSelectedLayout}) => {
