@@ -150,7 +150,13 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
       setFramePositions(positions);
 
       //Basic logic to derive hole positions
-      const calculatedHolePositions = [];
+      interface HolePosition {
+          x: number;
+          y: number;
+          frameId: any;
+          hangerIndex: number;
+      }
+      const calculatedHolePositions: HolePosition[] = [];
         positions.forEach((frame) => {
             frameDimensions.hangerDistance.forEach((distance, index) => {
                 calculatedHolePositions.push({
