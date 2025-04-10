@@ -157,11 +157,7 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
       </p>
       {wallDimensions.width > 0 && wallDimensions.height > 0 ? (
         <TransformWrapper
-          defaultScale={1}
-          minScale={0.5}
-          maxScale={3}
-          wheel={{disabled: false}}
-          pan={{disabled: false}}
+          
         >
           {({zoomIn, zoomOut, resetTransform, ...rest}) => (
             <>
@@ -251,4 +247,3 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
     </div>
   );
 };
-
