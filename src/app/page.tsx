@@ -12,7 +12,7 @@ import {Toaster} from "@/components/ui/toaster";
 import {useSearchParams} from 'next/navigation';
 
 export default function Home() {
-  const [frameDimensions, setFrameDimensions] = useState({width: 10, height: 15, depth: 2});
+  const [frameDimensions, setFrameDimensions] = useState({width: 10, height: 15, depth: 2, hangerDistance: 2});
   const [hangerType, setHangerType] = useState("");
   const [wallDimensions, setWallDimensions] = useState({width: 100, height: 100});
   const [selectedLayout, setSelectedLayout] = useState("vertical");
@@ -76,3 +76,4 @@ export default function Home() {
     </div>
   );
 }
+

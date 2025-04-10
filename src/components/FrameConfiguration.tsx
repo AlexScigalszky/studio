@@ -56,7 +56,6 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
           type="number"
           id="width"
           value={width}
-          defaultValue={10}
           onChange={(e) => setWidth(Number(e.target.value))}
         />
       </div>
@@ -66,7 +65,6 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
           type="number"
           id="height"
           value={height}
-          defaultValue={15}
           onChange={(e) => setHeight(Number(e.target.value))}
         />
       </div>
@@ -76,7 +74,6 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
           type="number"
           id="depth"
           value={depth}
-          defaultValue={2}
           onChange={(e) => setDepth(Number(e.target.value))}
         />
       </div>
@@ -86,7 +83,6 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
           type="number"
           id="hangerDistance"
           value={hangerDistance}
-          defaultValue={2}
           onChange={(e) => setHangerDistance(Number(e.target.value))}
         />
       </div>
@@ -103,3 +99,4 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
     </form>
   );
 };
+

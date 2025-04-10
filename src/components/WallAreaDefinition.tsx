@@ -46,7 +46,6 @@ export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
           type="number"
           id="wallWidth"
           value={width}
-          defaultValue={100}
           onChange={(e) => setWidth(Number(e.target.value))}
         />
       </div>
@@ -56,7 +55,6 @@ export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
           type="number"
           id="wallHeight"
           value={height}
-          defaultValue={100}
           onChange={(e) => setHeight(Number(e.target.value))}
         />
       </div>
@@ -64,3 +62,4 @@ export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
     </form>
   );
 };
+
