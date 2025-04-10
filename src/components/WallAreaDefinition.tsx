@@ -9,6 +9,7 @@ import {useRouter} from "next/navigation";
 
 interface WallAreaDefinitionProps {
   setWallDimensions: (dimensions: { width: number; height: number }) => void;
+  onNext: () => void;
 }
 
 export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
