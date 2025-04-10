@@ -1,6 +1,6 @@
 "use client";
 
-import {useState, useEffect} from "react";
+import {useState, useEffect, Dispatch, SetStateAction} from "react";
 import {FrameConfiguration} from "@/components/FrameConfiguration";
 import {WallAreaDefinition} from "@/components/WallAreaDefinition";
 import {LayoutSelection} from "@/components/LayoutSelection";
@@ -9,17 +9,18 @@ import {HolePositionMeasurement} from "@/components/HolePositionMeasurement";
 import {Card} from "@/components/ui/card";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {Toaster} from "@/components/ui/toaster";
-import {useSearchParams} from 'next/navigation';
+import {useSearchParams, useRouter} from 'next/navigation';
 
 export default function Home() {
   const [frameDimensions, setFrameDimensions] = useState({width: 10, height: 15, depth: 2, hangerDistance: 2});
   const [hangerType, setHangerType] = useState("");
   const [wallDimensions, setWallDimensions] = useState({width: 100, height: 100});
   const [selectedLayout, setSelectedLayout] = useState("vertical");
-  const [holePositions, setHolePositions] = useState([]);
+  const [holePositions, setHolePositions] = useState<{x: number; y: number;}[]>([]);
     const searchParams = useSearchParams();
     const tab = searchParams.get('tab');
     const [activeTab, setActiveTab] = useState(tab || "frame");
+    const router = useRouter();
 
     useEffect(() => {
         if (tab) {
@@ -27,10 +28,15 @@ export default function Home() {
         }
     }, [tab]);
 
+    const handleTabChange = (tab: string) => {
+        setActiveTab(tab);
+        router.push(`/?tab=${tab}`);
+    };
+
   return (
     <div className="container mx-auto p-4 max-w-4xl">
       <h1 className="text-2xl font-bold mb-4">FrameIt</h1>
-      <Tabs value={activeTab} onValueChange={(tab) => setActiveTab(tab)} className="w-full">
+      <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
         <TabsList>
           <TabsTrigger value="frame">Frame</TabsTrigger>
           <TabsTrigger value="wall">Wall</TabsTrigger>
@@ -43,17 +49,24 @@ export default function Home() {
             <FrameConfiguration
               setFrameDimensions={setFrameDimensions}
               setHangerType={setHangerType}
+              onNext={() => handleTabChange("wall")}
             />
           </Card>
         </TabsContent>
         <TabsContent value="wall">
           <Card className="mb-4">
-            <WallAreaDefinition setWallDimensions={setWallDimensions} />
+            <WallAreaDefinition
+                setWallDimensions={setWallDimensions}
+                onNext={() => handleTabChange("layout")}
+            />
           </Card>
         </TabsContent>
         <TabsContent value="layout">
           <Card className="mb-4">
-            <LayoutSelection setSelectedLayout={setSelectedLayout} />
+            <LayoutSelection
+              setSelectedLayout={setSelectedLayout}
+              onNext={() => handleTabChange("preview")}
+            />
           </Card>
         </TabsContent>
         <TabsContent value="preview">
@@ -76,4 +89,3 @@ export default function Home() {
     </div>
   );
 }
-
