@@ -3,7 +3,12 @@
 import {useEffect, useState} from "react";
 
 interface VisualPlacementPreviewProps {
-  frameDimensions: {width: number; height: number; depth: number};
+  frameDimensions: {
+    width: number;
+    height: number;
+    depth: number;
+    hangerDistance: number;
+  };
   wallDimensions: {width: number; height: number};
   selectedLayout: string;
   setHolePositions: (positions: {x: number; y: number}[]) => void;
@@ -88,7 +93,7 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
       //Basic logic to derive hole positions
       const calculatedHolePositions = positions.map((frame) => ({
         x: frame.x + frameDimensions.width / 2, // Example: Center of the frame
-        y: frame.y + frameDimensions.height / 2, // Example: Center of the frame
+        y: frame.y + frameDimensions.hangerDistance, // Use hangerDistance
       }));
 
       setHolePositionsCalculated(calculatedHolePositions);
@@ -137,14 +142,14 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
               {/* Display hole position */}
               <text
                 x={pos.x + frameDimensions.width / 2}
-                y={pos.y + frameDimensions.height / 2}
+                y={pos.y + frameDimensions.hangerDistance}
                 textAnchor="middle"
                 dominantBaseline="middle"
                 fontSize="2"
                 fill="black"
               >
                 Hole at ({(pos.x + frameDimensions.width / 2).toFixed(1)},
-                {(pos.y + frameDimensions.height / 2).toFixed(1)}) cm
+                {(pos.y + frameDimensions.hangerDistance).toFixed(1)}) cm
               </text>
             </g>
           ))}

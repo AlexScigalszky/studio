@@ -8,7 +8,12 @@ import {toast} from "@/hooks/use-toast";
 import {useRouter} from "next/navigation";
 
 interface FrameConfigurationProps {
-  setFrameDimensions: (dimensions: { width: number; height: number; depth: number }) => void;
+  setFrameDimensions: (dimensions: {
+    width: number;
+    height: number;
+    depth: number;
+    hangerDistance: number;
+  }) => void;
   setHangerType: (type: string) => void;
 }
 
@@ -20,6 +25,7 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
   const [height, setHeight] = useState<number>(15);
   const [depth, setDepth] = useState<number>(2);
   const [hanger, setHanger] = useState<string>("");
+  const [hangerDistance, setHangerDistance] = useState<number>(2); // New state for hanger distance
   const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -32,7 +38,7 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
       });
       return;
     }
-    setFrameDimensions({width, height, depth});
+    setFrameDimensions({width, height, depth, hangerDistance}); // Include hangerDistance
     setHangerType(hanger);
 
     toast({
@@ -72,6 +78,16 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
           value={depth}
           defaultValue={2}
           onChange={(e) => setDepth(Number(e.target.value))}
+        />
+      </div>
+      <div>
+        <Label htmlFor="hangerDistance">Hanger Distance (cm)</Label>
+        <Input // New input for hanger distance
+          type="number"
+          id="hangerDistance"
+          value={hangerDistance}
+          defaultValue={2}
+          onChange={(e) => setHangerDistance(Number(e.target.value))}
         />
       </div>
       <div>
