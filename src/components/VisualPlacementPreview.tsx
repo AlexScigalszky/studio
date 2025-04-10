@@ -89,6 +89,39 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
           y: startY + frameHeight + frameSpacing,
           id: 2,
         });
+      } else if (selectedLayout === "triangle") {
+        // Triangle layout: One at the top, two at the bottom
+        const frameWidth = Math.min(frameDimensions.width, wallDimensions.width * 0.3);
+        const frameHeight = Math.min(frameDimensions.height, wallDimensions.height * 0.3);
+        const frameSpacing = 10;
+
+        const startX = wallDimensions.width / 2 - frameWidth / 2;
+        const startY = wallDimensions.height * 0.2;
+
+        positions.push({ x: startX, y: startY, id: 1 }); // Top frame
+
+        const bottomStartY = wallDimensions.height * 0.6;
+        const bottomStartX = wallDimensions.width / 4 - frameWidth / 2;
+        positions.push({ x: bottomStartX, y: bottomStartY, id: 2 }); // Bottom left frame
+        positions.push({ x: wallDimensions.width * 0.75 - frameWidth / 2, y: bottomStartY, id: 3 }); // Bottom right frame
+      } else if (selectedLayout === "staircase") {
+        // Staircase layout: Frames diagonally increasing in height
+        const frameWidth = Math.min(frameDimensions.width, wallDimensions.width * 0.3);
+        const frameHeight = Math.min(frameDimensions.height, wallDimensions.height * 0.3);
+        const frameSpacing = 10;
+
+        let currentX = wallDimensions.width * 0.2;
+        let currentY = wallDimensions.height * 0.2;
+
+        positions.push({ x: currentX, y: currentY, id: 1 });
+
+        currentX += frameWidth + frameSpacing;
+        currentY += frameHeight + frameSpacing;
+        positions.push({ x: currentX, y: currentY, id: 2 });
+
+        currentX += frameWidth + frameSpacing;
+        currentY += frameHeight + frameSpacing;
+        positions.push({ x: currentX, y: currentY, id: 3 });
       }
 
       setFramePositions(positions);
@@ -218,3 +251,4 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
     </div>
   );
 };
+

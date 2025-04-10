@@ -12,7 +12,7 @@ interface LayoutSelectionProps {
 }
 
 export const LayoutSelection: React.FC<LayoutSelectionProps> = ({setSelectedLayout}) => {
-  const [layout, setLayout] = useState<string>("");
+  const [layout, setLayout] = useState<string>("vertical");
   const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -55,6 +55,14 @@ export const LayoutSelection: React.FC<LayoutSelectionProps> = ({setSelectedLayo
               <RadioGroupItem value="diagonal" id="diagonal" />
               <Label htmlFor="diagonal">Diagonal</Label>
             </div>
+              <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="triangle" id="triangle"/>
+                  <Label htmlFor="triangle">Triangle</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="staircase" id="staircase"/>
+                  <Label htmlFor="staircase">Staircase</Label>
+              </div>
           </div>
         </RadioGroup>
       </div>
@@ -62,3 +70,4 @@ export const LayoutSelection: React.FC<LayoutSelectionProps> = ({setSelectedLayo
     </form>
   );
 };
+
