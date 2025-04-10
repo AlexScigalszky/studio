@@ -5,6 +5,7 @@ import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {Button} from "@/components/ui/button";
 import {toast} from "@/hooks/use-toast";
+import {useRouter} from "next/navigation";
 
 interface FrameConfigurationProps {
   setFrameDimensions: (dimensions: { width: number; height: number; depth: number }) => void;
@@ -19,6 +20,7 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
   const [height, setHeight] = useState<number>(15);
   const [depth, setDepth] = useState<number>(2);
   const [hanger, setHanger] = useState<string>("");
+  const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,6 +39,7 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
       title: "Success!",
       description: "Frame configuration saved.",
     });
+    router.push("/?tab=wall");
   };
 
   return (
@@ -84,5 +87,3 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
     </form>
   );
 };
-
-    

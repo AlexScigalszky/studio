@@ -5,6 +5,7 @@ import {Label} from "@/components/ui/label";
 import {RadioGroup, RadioGroupItem} from "@/components/ui/radio-group";
 import {Button} from "@/components/ui/button";
 import {toast} from "@/hooks/use-toast";
+import {useRouter} from "next/navigation";
 
 interface LayoutSelectionProps {
   setSelectedLayout: (layout: string) => void;
@@ -12,6 +13,7 @@ interface LayoutSelectionProps {
 
 export const LayoutSelection: React.FC<LayoutSelectionProps> = ({setSelectedLayout}) => {
   const [layout, setLayout] = useState<string>("");
+  const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,6 +30,7 @@ export const LayoutSelection: React.FC<LayoutSelectionProps> = ({setSelectedLayo
       title: "Success!",
       description: "Layout selected.",
     });
+    router.push("/?tab=preview");
   };
 
   return (

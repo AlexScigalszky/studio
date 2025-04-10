@@ -5,6 +5,7 @@ import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {Button} from "@/components/ui/button";
 import {toast} from "@/hooks/use-toast";
+import {useRouter} from "next/navigation";
 
 interface WallAreaDefinitionProps {
   setWallDimensions: (dimensions: { width: number; height: number }) => void;
@@ -15,6 +16,7 @@ export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
 }) => {
   const [width, setWidth] = useState<number>(100);
   const [height, setHeight] = useState<number>(100);
+  const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,6 +35,7 @@ export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
       title: "Success!",
       description: "Wall dimensions saved.",
     });
+    router.push("/?tab=layout");
   };
 
   return (
@@ -61,4 +64,3 @@ export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
     </form>
   );
 };
-
