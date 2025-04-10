@@ -1,6 +1,7 @@
 import type {Metadata} from 'next';
 import {Roboto} from 'next/font/google';
 import './globals.css';
+import {notFound} from 'next/navigation';
 
 const roboto = Roboto({
   weight: ['400', '500', '700'],
@@ -27,4 +28,11 @@ export default function RootLayout({
   );
 }
 
+export function generateStaticParams() {
+    return [{params: {}}];
+}
+
+// export function generateMetadata() {
+//     return {title: 'FrameIt'};
+// }
 
