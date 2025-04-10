@@ -24,4 +24,3 @@ export const HolePositionMeasurement: React.FC<HolePositionMeasurementProps> = (
     </div>
   );
 };
-

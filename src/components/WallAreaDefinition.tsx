@@ -14,10 +14,10 @@ interface WallAreaDefinitionProps {
 
 export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
   setWallDimensions,
+  onNext
 }) => {
   const [width, setWidth] = useState<number>(100);
   const [height, setHeight] = useState<number>(100);
-  const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +36,7 @@ export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
       title: "Success!",
       description: "Wall dimensions saved.",
     });
-    router.push("/?tab=layout");
+    onNext();
   };
 
   return (
@@ -63,4 +63,3 @@ export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
     </form>
   );
 };
-

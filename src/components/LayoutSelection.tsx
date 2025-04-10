@@ -12,7 +12,7 @@ interface LayoutSelectionProps {
   onNext: () => void;
 }
 
-export const LayoutSelection: React.FC<LayoutSelectionProps> = ({setSelectedLayout}) => {
+export const LayoutSelection: React.FC<LayoutSelectionProps> = ({setSelectedLayout, onNext}) => {
   const [layout, setLayout] = useState<string>("vertical");
   const router = useRouter();
 
@@ -31,7 +31,7 @@ export const LayoutSelection: React.FC<LayoutSelectionProps> = ({setSelectedLayo
       title: "Success!",
       description: "Layout selected.",
     });
-    router.push("/?tab=preview");
+    onNext();
   };
 
   return (
@@ -64,6 +64,14 @@ export const LayoutSelection: React.FC<LayoutSelectionProps> = ({setSelectedLayo
                   <RadioGroupItem value="staircase" id="staircase"/>
                   <Label htmlFor="staircase">Staircase</Label>
               </div>
+              <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="fancy1" id="fancy1"/>
+                  <Label htmlFor="fancy1">Fancy 1</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="fancy2" id="fancy2"/>
+                  <Label htmlFor="fancy2">Fancy 2</Label>
+              </div>
           </div>
         </RadioGroup>
       </div>
@@ -71,4 +79,3 @@ export const LayoutSelection: React.FC<LayoutSelectionProps> = ({setSelectedLayo
     </form>
   );
 };
-

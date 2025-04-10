@@ -5,7 +5,6 @@ import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {Button} from "@/components/ui/button";
 import {toast} from "@/hooks/use-toast";
-import {useRouter} from "next/navigation";
 
 interface FrameConfigurationProps {
   onNext: () => void;
@@ -13,7 +12,7 @@ interface FrameConfigurationProps {
     width: number;
     height: number;
     depth: number;
-    hangerDistance: number;
+    hangerDistance: number[];
   }) => void;
   setHangerType: (type: string) => void;
 }
@@ -27,8 +26,7 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
   const [height, setHeight] = useState<number>(15);
   const [depth, setDepth] = useState<number>(2);
   const [hanger, setHanger] = useState<string>("");
-  const [hangerDistance, setHangerDistance] = useState<number>(2); // New state for hanger distance
-  const router = useRouter();
+  const [hangerDistances, setHangerDistances] = useState<string>("2");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,14 +38,18 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
       });
       return;
     }
-    setFrameDimensions({width, height, depth, hangerDistance}); // Include hangerDistance
+
+      // Parse hanger distances from comma-separated string to array of numbers
+      const hangerDistanceArray = hangerDistances.split(',').map(Number);
+
+    setFrameDimensions({width, height, depth, hangerDistance: hangerDistanceArray});
     setHangerType(hanger);
 
     toast({
       title: "Success!",
       description: "Frame configuration saved.",
     });
-    onNext()
+      onNext();
   };
 
   return (
@@ -80,12 +82,12 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
         />
       </div>
       <div>
-        <Label htmlFor="hangerDistance">Hanger Distance (cm)</Label>
-        <Input // New input for hanger distance
-          type="number"
+        <Label htmlFor="hangerDistance">Hanger Distance(s) (cm) - Comma Separated</Label>
+        <Input
+          type="text"
           id="hangerDistance"
-          value={hangerDistance}
-          onChange={(e) => setHangerDistance(Number(e.target.value))}
+          value={hangerDistances}
+          onChange={(e) => setHangerDistances(e.target.value)}
         />
       </div>
       <div>
@@ -101,4 +103,3 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
     </form>
   );
 };
-

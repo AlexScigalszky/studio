@@ -9,7 +9,7 @@ interface VisualPlacementPreviewProps {
     width: number;
     height: number;
     depth: number;
-    hangerDistance: number;
+    hangerDistance: number[];
   };
   wallDimensions: {width: number; height: number};
   selectedLayout: string;
@@ -122,15 +122,45 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
         currentX += frameWidth + frameSpacing;
         currentY += frameHeight + frameSpacing;
         positions.push({ x: currentX, y: currentY, id: 3 });
+      } else if (selectedLayout === "fancy1") {
+          // Fancy layout 1: Overlapping frames
+          const frameWidth = Math.min(frameDimensions.width, wallDimensions.width * 0.4);
+          const frameHeight = Math.min(frameDimensions.height, wallDimensions.height * 0.4);
+          const frameSpacing = -15; // Negative spacing for overlap
+
+          const startX = wallDimensions.width / 2 - frameWidth / 2;
+          const startY = wallDimensions.height / 2 - frameHeight / 2;
+
+          positions.push({ x: startX, y: startY, id: 1 });
+          positions.push({ x: startX + frameSpacing, y: startY + frameSpacing, id: 2 });
+      } else if (selectedLayout === "fancy2") {
+          // Fancy layout 2: Cluster at the top
+          const frameWidth = Math.min(frameDimensions.width, wallDimensions.width * 0.3);
+          const frameHeight = Math.min(frameDimensions.height, wallDimensions.height * 0.3);
+          const frameSpacing = 5;
+
+          const startX = wallDimensions.width / 3 - frameWidth / 2;
+          const startY = wallDimensions.height * 0.1;
+
+          positions.push({ x: startX, y: startY, id: 1 });
+          positions.push({ x: startX + frameWidth + frameSpacing, y: startY, id: 2 });
+          positions.push({ x: wallDimensions.width / 2 - frameWidth / 2, y: startY + frameHeight + frameSpacing, id: 3 });
       }
 
       setFramePositions(positions);
 
       //Basic logic to derive hole positions
-      const calculatedHolePositions = positions.map((frame) => ({
-        x: frame.x + frameDimensions.width / 2, // Example: Center of the frame
-        y: frame.y + frameDimensions.hangerDistance, // Use hangerDistance
-      }));
+      const calculatedHolePositions = [];
+        positions.forEach((frame) => {
+            frameDimensions.hangerDistance.forEach((distance, index) => {
+                calculatedHolePositions.push({
+                    x: frame.x + frameDimensions.width / 2,
+                    y: frame.y + distance,
+                    frameId: frame.id,
+                    hangerIndex: index + 1,
+                });
+            });
+        });
 
       setHolePositionsCalculated(calculatedHolePositions);
       setHolePositions(calculatedHolePositions);
@@ -157,9 +187,9 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
       </p>
       {wallDimensions.width > 0 && wallDimensions.height > 0 ? (
         <TransformWrapper
-          
+            options={{limitToBounds: false, minScale: 0.5, maxScale: 3}}
         >
-          {({zoomIn, zoomOut, resetTransform, ...rest}) => (
+          {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
             <>
               <div className="flex justify-center space-x-4 mb-2">
                 <button onClick={() => zoomIn()} className="px-4 py-2 bg-gray-200 rounded">
@@ -192,19 +222,21 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
                         fill="lightblue"
                         stroke="blue"
                       />
-
-                      {/* Display hole position */}
-                      <text
-                        x={pos.x + frameDimensions.width / 2}
-                        y={pos.y + frameDimensions.hangerDistance}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                        fontSize="2"
-                        fill="black"
-                      >
-                        Hole at ({(pos.x + frameDimensions.width / 2).toFixed(1)},
-                        {(pos.y + frameDimensions.hangerDistance).toFixed(1)}) cm
-                      </text>
+                       {frameDimensions.hangerDistance.map((distance, index) => (
+                        // Display hole position
+                        <text
+                            key={`hole-text-${pos.id}-${index}`}
+                            x={pos.x + frameDimensions.width / 2}
+                            y={pos.y + distance}
+                            textAnchor="middle"
+                            dominantBaseline="middle"
+                            fontSize="2"
+                            fill="black"
+                        >
+                            Hole {index + 1} at ({(pos.x + frameDimensions.width / 2).toFixed(1)},
+                            {(pos.y + distance).toFixed(1)}) cm
+                        </text>
+                        ))}
                     </g>
                   ))}
                   {/* Draw lines from hole positions to wall edges */}

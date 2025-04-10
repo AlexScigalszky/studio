@@ -1,6 +1,6 @@
 "use client";
 
-import {useState, useEffect, Dispatch, SetStateAction} from "react";
+import {useState, useEffect} from "react";
 import {FrameConfiguration} from "@/components/FrameConfiguration";
 import {WallAreaDefinition} from "@/components/WallAreaDefinition";
 import {LayoutSelection} from "@/components/LayoutSelection";
@@ -12,7 +12,7 @@ import {Toaster} from "@/components/ui/toaster";
 import {useSearchParams, useRouter} from 'next/navigation';
 
 export default function Home() {
-  const [frameDimensions, setFrameDimensions] = useState({width: 10, height: 15, depth: 2, hangerDistance: 2});
+  const [frameDimensions, setFrameDimensions] = useState({width: 10, height: 15, depth: 2, hangerDistance: [2]});
   const [hangerType, setHangerType] = useState("");
   const [wallDimensions, setWallDimensions] = useState({width: 100, height: 100});
   const [selectedLayout, setSelectedLayout] = useState("vertical");
