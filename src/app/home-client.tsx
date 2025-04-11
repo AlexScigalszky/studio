@@ -5,7 +5,6 @@ import {FrameConfiguration} from "@/components/FrameConfiguration";
 import {WallAreaDefinition} from "@/components/WallAreaDefinition";
 import {LayoutSelection} from "@/components/LayoutSelection";
 import {VisualPlacementPreview} from "@/components/VisualPlacementPreview";
-import {HolePositionMeasurement} from "@/components/HolePositionMeasurement";
 import {Card} from "@/components/ui/card";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {Toaster} from "@/components/ui/toaster";
@@ -42,7 +41,6 @@ export default function HomeClient() {
           <TabsTrigger value="wall">Wall</TabsTrigger>
           <TabsTrigger value="layout">Layout</TabsTrigger>
           <TabsTrigger value="preview">Preview</TabsTrigger>
-          <TabsTrigger value="measurements">Measurements</TabsTrigger>
         </TabsList>
         <TabsContent value="frame">
           <Card className="mb-4">
@@ -77,11 +75,6 @@ export default function HomeClient() {
               selectedLayout={selectedLayout}
               setHolePositions={setHolePositions}
             />
-          </Card>
-        </TabsContent>
-        <TabsContent value="measurements">
-          <Card className="mb-4">
-            <HolePositionMeasurement holePositions={holePositions} />
           </Card>
         </TabsContent>
       </Tabs>
