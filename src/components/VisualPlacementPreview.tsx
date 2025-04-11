@@ -193,7 +193,9 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
       </p>
       {wallDimensions.width > 0 && wallDimensions.height > 0 ? (
         <TransformWrapper
-            options={{limitToBounds: false, minScale: 0.5, maxScale: 3}}
+            limitToBounds={false}
+            minScale={0.5}
+            maxScale={3}
         >
           {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
             <>
