@@ -31,8 +31,9 @@ export default function HomeClient() {
 
     const handleTabChange = (tab: string) => {
         // Update the URL and activeTab state
-        const newURL = `/?tab=${tab}`;
-        router.push(newURL, { shallow: true }); // Use shallow routing to avoid full page reload
+        const newParams = new URLSearchParams(searchParams.toString());
+        newParams.set('tab', tab);
+        router.push(`/?${newParams.toString()}`, { shallow: true }); // Use shallow routing to avoid full page reload
         setActiveTab(tab);
     };
 
