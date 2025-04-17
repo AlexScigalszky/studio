@@ -29,6 +29,7 @@ const distributionLabels: { [key: string]: string } = {
     "Centered Composition": "Centered Composition",
     "Chaotic Cascade": "Chaotic Cascade",
     "Spiral Out": "Spiral Out",
+    "Random": "Random"
 };
 
 export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
@@ -183,7 +184,16 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
               const startY = centerY + distance * Math.sin(angle * Math.PI / 180) - frameHeight / 2;
               addFrame(startX, startY, i + 1);
           }
-      }
+      }  else if (selectedDistribution === "Random") {
+            // Scattered distribution: Random positions
+            const numFrames = 4;
+            for (let i = 0; i < numFrames; i++) {
+                let startX = Math.random() * (wallWidth - frameWidth);
+                let startY = Math.random() * (wallHeight - frameHeight);
+                addFrame(startX, startY, i + 1)
+            }
+
+        }
 
 
       setFramePositions(positions);
@@ -225,8 +235,8 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
     const distributionLabel = distributionLabels[selectedDistribution] || selectedDistribution;
 
   return (
-    <div className="w-full flex">
-      <div className="w-1/4 p-4">
+    <div className="w-full flex flex-row">
+      <div className="w-2/5 p-4">
         <p className="mb-2">
           Visual Placement Preview:
           <br />
@@ -252,7 +262,7 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
         </div>
       </div>
 
-      <div className="w-3/4">
+      <div className="w-3/5">
         {wallDimensions.width > 0 && wallDimensions.height > 0 ? (
           <>
             <TransformWrapper
@@ -353,3 +363,4 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
     </div>
   );
 };
+
