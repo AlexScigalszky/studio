@@ -1,33 +1,18 @@
 "use client";
 
-import {useState} from "react";
 import {Label} from "@/components/ui/label";
 import {RadioGroup, RadioGroupItem} from "@/components/ui/radio-group";
-import {Button} from "@/components/ui/button";
 
 interface DistributionSelectionProps {
   setSelectedDistribution: (distribution: string) => void;
-    onValid: () => void;
 }
 
-export const DistributionSelection: React.FC<DistributionSelectionProps> = ({setSelectedDistribution, onValid}) => {
-  const [distribution, setDistribution] = useState<string>("Vertical Stack");
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!distribution) {
-        alert("Please select a distribution.");
-        return;
-    }
-    setSelectedDistribution(distribution);
-      onValid();
-  };
-
+export const DistributionSelection: React.FC<DistributionSelectionProps> = ({setSelectedDistribution}) => {
   return (
-    <form onSubmit={handleSubmit} className="grid gap-4">
+    <div className="grid gap-4">
       <div>
         <Label>Select Distribution</Label>
-        <RadioGroup defaultValue={distribution} onValueChange={setDistribution}>
+        <RadioGroup onValueChange={setSelectedDistribution}>
           <div className="flex flex-col space-y-2">
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="Vertical Stack" id="vertical" />
@@ -80,7 +65,6 @@ export const DistributionSelection: React.FC<DistributionSelectionProps> = ({set
           </div>
         </RadioGroup>
       </div>
-        <Button type="submit">Select Distribution</Button>
-    </form>
+    </div>
   );
 };

@@ -1,9 +1,7 @@
 "use client";
 
-import {useState} from "react";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
-import {Button} from "@/components/ui/button";
 
 interface FrameConfigurationProps {
   setFrameDimensions: (dimensions: {
@@ -13,47 +11,46 @@ interface FrameConfigurationProps {
     hangerDistance: number[];
   }) => void;
   setHangerType: (type: string) => void;
-    onValid: () => void;
 }
 
 export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
   setFrameDimensions,
   setHangerType,
-    onValid,
 }) => {
-  const [width, setWidth] = useState<number>(10);
-  const [height, setHeight] = useState<number>(15);
-  const [depth, setDepth] = useState<number>(2);
-  const [hanger, setHanger] = useState<string>("");
-  const [hangerDistances, setHangerDistances] = useState<string>("2");
+  const handleWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const width = Number(e.target.value);
+    setFrameDimensions(prev => ({...prev, width}));
+  };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const height = Number(e.target.value);
+    setFrameDimensions(prev => ({...prev, height}));
+  };
 
-      // Validate the input values
-      if (width <= 0 || height <= 0 || depth <= 0) {
-          alert("Please enter valid frame dimensions."); // Simple validation
-          return;
-      }
+  const handleDepthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const depth = Number(e.target.value);
+    setFrameDimensions(prev => ({...prev, depth}));
+  };
 
-      // Parse hanger distances from comma-separated string to array of numbers
-      const hangerDistanceArray = hangerDistances.split(',').map(Number);
+  const handleHangerDistanceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const hangerDistances = e.target.value.split(',').map(Number);
+    setFrameDimensions(prev => ({...prev, hangerDistance: hangerDistances}));
+  };
 
-    setFrameDimensions({width, height, depth, hangerDistance: hangerDistanceArray});
-    setHangerType(hanger);
-      onValid();
+  const handleHangerTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setHangerType(e.target.value);
   };
 
   return (
     
-      <form onSubmit={handleSubmit} className="grid gap-4">
+      <div className="grid gap-4">
         <div>
           <Label htmlFor="width">Width (cm)</Label>
           <Input
             type="number"
             id="width"
-            value={width}
-            onChange={(e) => setWidth(Number(e.target.value))}
+            defaultValue={10}
+            onChange={handleWidthChange}
           />
         </div>
         <div>
@@ -61,8 +58,8 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
           <Input
             type="number"
             id="height"
-            value={height}
-            onChange={(e) => setHeight(Number(e.target.value))}
+            defaultValue={15}
+            onChange={handleHeightChange}
           />
         </div>
         <div>
@@ -70,8 +67,8 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
           <Input
             type="number"
             id="depth"
-            value={depth}
-            onChange={(e) => setDepth(Number(e.target.value))}
+            defaultValue={2}
+            onChange={handleDepthChange}
           />
         </div>
         <div>
@@ -79,8 +76,8 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
           <Input
             type="text"
             id="hangerDistance"
-            value={hangerDistances}
-            onChange={(e) => setHangerDistances(e.target.value)}
+            defaultValue="2"
+            onChange={handleHangerDistanceChange}
           />
         </div>
         <div>
@@ -88,12 +85,11 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
           <Input
             type="text"
             id="hanger"
-            value={hanger}
-            onChange={(e) => setHanger(e.target.value)}
+            defaultValue=""
+            onChange={handleHangerTypeChange}
           />
         </div>
-          <Button type="submit">Save Frame Configuration</Button>
-      </form>
+      </div>
     
   );
 };
