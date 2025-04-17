@@ -17,19 +17,24 @@ export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
 }) => {
   const handleWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newWidth = Number(e.target.value);
-    setWallDimensions((prev: WallDimensions) => ({
-      ...prev,
-      width: newWidth
-    }));
+    setWallDimensions((prev: WallDimensions) => {
+      return {
+        ...prev,
+        width: newWidth,
+      };
+    });
+
   };
   const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newHeight = Number(e.target.value);
-    setWallDimensions((prev: WallDimensions) => ({
-      ...prev,
-      height: newHeight
-
-    }));
+    setWallDimensions((prev: WallDimensions) => {
+      return{
+        ...prev,
+        height: newHeight,
+      };
+    });
   };
+  
 
   return (
     <div className="grid gap-4">
