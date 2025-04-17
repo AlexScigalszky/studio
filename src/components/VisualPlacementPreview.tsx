@@ -17,6 +17,21 @@ interface VisualPlacementPreviewProps {
   setHolePositions: (positions: {x: number; y: number}[]) => void;
 }
 
+const distributionLabels: { [key: string]: string } = {
+    "vertical": "Vertical Stack",
+    "horizontal": "Horizontal Row",
+    "grid": "Square Grid",
+    "diagonal": "Diagonal Line",
+    "triangle": "Triangular Arrangement",
+    "staircase": "Staircase Pattern",
+    "fancy1": "Overlapping Frames",
+    "fancy2": "Top Cluster",
+    "scattered": "Scattered Display",
+    "centered": "Centered Composition",
+    "chaotic": "Chaotic Cascade",
+    "spiral": "Spiral Out",
+};
+
 export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
   frameDimensions,
   wallDimensions,
@@ -45,7 +60,7 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
       const wallWidth = wallDimensions.width;
       const wallHeight = wallDimensions.height;
 
-      if (selectedDistribution === "Vertical Stack") {
+      if (selectedDistribution === "vertical") {
           // Example: Vertical distribution - frames stacked vertically in the center
           const frameSpacing = 10; // Space between frames
 
@@ -55,7 +70,7 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
 
           addFrame(startX, startY, 1)
           addFrame(startX, startY + frameHeight + frameSpacing, 2)
-      } else if (selectedDistribution === "Horizontal Row") {
+      } else if (selectedDistribution === "horizontal") {
           // Example: Horizontal distribution - frames side by side in the center
           const frameSpacing = 10; // Space between frames
 
@@ -65,7 +80,7 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
           addFrame(startX, startY, 1)
           addFrame(startX + frameWidth + frameSpacing, startY, 2)
 
-      } else if (selectedDistribution === "Square Grid") {
+      } else if (selectedDistribution === "grid") {
           const frameSpacing = 10;
 
           const startX = (wallWidth - (2 * frameWidth + frameSpacing)) / 2;
@@ -75,7 +90,7 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
           addFrame(startX, startY + frameHeight + frameSpacing, 3)
           addFrame(startX + frameWidth + frameSpacing, startY + frameHeight + frameSpacing, 4)
 
-      } else if (selectedDistribution === "Diagonal Line") {
+      } else if (selectedDistribution === "diagonal") {
           const frameSpacing = 10;
 
           const startX = (wallWidth - (2 * frameWidth + frameSpacing)) / 2;
@@ -84,7 +99,7 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
           // Diagonal distribution: Top-left to Bottom-right
           addFrame(startX, startY, 1)
           addFrame(startX + frameWidth + frameSpacing, startY + frameHeight + frameSpacing, 2)
-      } else if (selectedDistribution === "Triangular Arrangement") {
+      } else if (selectedDistribution === "triangle") {
           // Triangle distribution: One at the top, two at the bottom
           const frameSpacing = 10;
 
@@ -97,7 +112,7 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
           const bottomEndX = wallWidth * 0.75 - frameWidth / 2;
           addFrame(bottomStartX, bottomStartY, 2)
           addFrame(bottomEndX, bottomStartY, 3) // Bottom right frame
-      } else if (selectedDistribution === "Staircase Pattern") {
+      } else if (selectedDistribution === "staircase") {
           // Staircase distribution: Frames diagonally increasing in height
           const frameSpacing = 10;
 
@@ -113,7 +128,7 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
           currentX += frameWidth + frameSpacing;
           currentY += frameHeight + frameSpacing;
           addFrame(currentX, currentY, 3)
-      } else if (selectedDistribution === "Overlapping Frames") {
+      } else if (selectedDistribution === "fancy1") {
           // Fancy distribution 1: Overlapping frames
           const frameSpacing = -15; // Negative spacing for overlap
 
@@ -122,7 +137,7 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
 
           addFrame(startX, startY, 1)
           addFrame(startX + frameSpacing, startY + frameSpacing, 2)
-      } else if (selectedDistribution === "Top Cluster") {
+      } else if (selectedDistribution === "fancy2") {
           // Fancy distribution 2: Cluster at the top
           const frameSpacing = 5;
 
@@ -131,7 +146,7 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
           addFrame(startX, startY, 1)
           addFrame(startX + frameWidth + frameSpacing, startY, 2)
           addFrame(wallWidth / 2 - frameWidth / 2, startY + frameHeight + frameSpacing, 3)
-      } else if (selectedDistribution === "Scattered Display") {
+      } else if (selectedDistribution === "scattered") {
           // Scattered distribution: Random positions
           const numFrames = 4;
           for (let i = 0; i < numFrames; i++) {
@@ -140,7 +155,7 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
               addFrame(startX, startY, i + 1)
           }
 
-      } else if (selectedDistribution === "Centered Composition") {
+      } else if (selectedDistribution === "centered") {
           // Centered distribution: Frames arranged around the center
           const frameSpacing = 10;
 
@@ -150,7 +165,7 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
           addFrame(startX, startY + frameHeight + frameSpacing, 2)
           addFrame(startX - frameWidth - frameSpacing, startY, 3)
           addFrame(startX + frameWidth + frameSpacing, startY, 4) // Right
-      } else if (selectedDistribution === "Chaotic Cascade") {
+      } else if (selectedDistribution === "chaotic") {
           const numFrames = 5;
           for (let i = 0; i < numFrames; i++) {
               const startX = Math.random() * (wallWidth - frameWidth);
@@ -158,7 +173,7 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
               const angle = Math.random() * 360; // Random angle for rotation
               addFrame(startX, startY, i + 1);
           }
-      } else if (selectedDistribution === "Spiral Out") {
+      } else if (selectedDistribution === "spiral") {
           const centerX = wallWidth / 2;
           const centerY = wallHeight / 2;
           const numFrames = 6;
@@ -208,12 +223,14 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
     }
   }, [frameDimensions, wallDimensions, selectedDistribution, setHolePositions]);
 
+    const distributionLabel = distributionLabels[selectedDistribution] || selectedDistribution;
+
   return (
     <div className="w-full">
       <p className="mb-2">
         Visual Placement Preview: Frame Dimensions - Width:{frameDimensions.width}, Height:
         {frameDimensions.height}, Depth:{frameDimensions.depth}, Wall Dimensions - Width:
-        {wallDimensions.width}, Height:{wallDimensions.height}, Distribution: {selectedDistribution}
+        {wallDimensions.width}, Height:{wallDimensions.height}, Distribution: {distributionLabel}
       </p>
       {wallDimensions.width > 0 && wallDimensions.height > 0 ? (
         <>
