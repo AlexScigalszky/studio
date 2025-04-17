@@ -225,122 +225,131 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
     const distributionLabel = distributionLabels[selectedDistribution] || selectedDistribution;
 
   return (
-    <div className="w-full">
-      <p className="mb-2">
-        Visual Placement Preview: Frame Dimensions - Width:{frameDimensions.width}, Height:
-        {frameDimensions.height}, Depth:{frameDimensions.depth}, Wall Dimensions - Width:
-        {wallDimensions.width}, Height:{wallDimensions.height}, Distribution: {distributionLabel}
-      </p>
-      {wallDimensions.width > 0 && wallDimensions.height > 0 ? (
-        <>
-          <TransformWrapper
+    <div className="w-full flex">
+      <div className="w-1/4 p-4">
+        <p className="mb-2">
+          Visual Placement Preview:
+          <br />
+          Frame Dimensions - Width: {frameDimensions.width}, Height: {frameDimensions.height}, Depth: {frameDimensions.depth}
+          <br />
+          Wall Dimensions - Width: {wallDimensions.width}, Height: {wallDimensions.height}
+          <br />
+          Distribution: {distributionLabel}
+        </p>
+        <div className="mt-4">
+          <p>Hole Position Measurements:</p>
+          {holePositionsCalculated.length === 0 ? (
+            <p>No hole positions available.</p>
+          ) : (
+            <ul className="list-disc pl-5">
+              {holePositionsCalculated.map((pos, index) => (
+                <li key={index}>
+                  Hole {index + 1}: X = {pos.x.toFixed(1)} cm, Y = {pos.y.toFixed(1)} cm (Frame ID: {pos.frameId}, Hanger Index: {pos.hangerIndex})
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+
+      <div className="w-3/4">
+        {wallDimensions.width > 0 && wallDimensions.height > 0 ? (
+          <>
+            <TransformWrapper
               limitToBounds={false}
               minScale={0.5}
               maxScale={3}
               wheel={{disabled: false}}
-          >
-            {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
-              <>
-                <div className="flex justify-center space-x-4 mb-2">
-                  <button onClick={() => zoomIn()} className="px-4 py-2 bg-gray-200 rounded">
-                    Zoom In
-                  </button>
-                  <button onClick={() => zoomOut()} className="px-4 py-2 bg-gray-200 rounded">
-                    Zoom Out
-                  </button>
-                  <button onClick={() => resetTransform()} className="px-4 py-2 bg-gray-200 rounded">
-                    Reset
-                  </button>
-                </div>
-                <TransformComponent>
-                  <svg
-                    width="100%"
-                    height="300px" // Reduced height for smaller preview
-                    viewBox={`0 0 ${wallDimensions.width} ${wallDimensions.height}`}
-                    style={{border: "1px solid #000", margin: "10px auto", display: "block"}}
-                  >
-                    {/* Wall Area */}
-                    <rect width={wallDimensions.width} height={wallDimensions.height} fill="#f0f0f0" />
-                    {/* Frames */}
-                    {framePositions.map((pos) => (
-                      <g key={pos.id}>
-                        <rect
-                          x={pos.x}
-                          y={pos.y}
-                          width={frameDimensions.width}
-                          height={frameDimensions.height}
-                          fill="lightblue"
-                          stroke="blue"
-                        />
-                         {frameDimensions.hangerDistance.map((distance, index) => (
-                          // Display hole position
-                          <text
-                              key={`hole-text-${pos.id}-${index}`}
-                              x={pos.x + frameDimensions.width / 2}
-                              y={pos.y + distance}
-                              textAnchor="middle"
-                              dominantBaseline="middle"
-                              fontSize="2"
-                              fill="black"
-                          >
-                              Hole {index + 1} at ({(pos.x + frameDimensions.width / 2).toFixed(1)},
-                              {(pos.y + distance).toFixed(1)}) cm
+            >
+              {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
+                <>
+                  <div className="flex justify-center space-x-4 mb-2">
+                    <button onClick={() => zoomIn()} className="px-4 py-2 bg-gray-200 rounded">
+                      Zoom In
+                    </button>
+                    <button onClick={() => zoomOut()} className="px-4 py-2 bg-gray-200 rounded">
+                      Zoom Out
+                    </button>
+                    <button onClick={() => resetTransform()} className="px-4 py-2 bg-gray-200 rounded">
+                      Reset
+                    </button>
+                  </div>
+                  <TransformComponent>
+                    <svg
+                      width="100%"
+                      height="300px" // Reduced height for smaller preview
+                      viewBox={`0 0 ${wallDimensions.width} ${wallDimensions.height}`}
+                      style={{border: "1px solid #000", margin: "10px auto", display: "block"}}
+                    >
+                      {/* Wall Area */}
+                      <rect width={wallDimensions.width} height={wallDimensions.height} fill="#f0f0f0" />
+                      {/* Frames */}
+                      {framePositions.map((pos) => (
+                        <g key={pos.id}>
+                          <rect
+                            x={pos.x}
+                            y={pos.y}
+                            width={frameDimensions.width}
+                            height={frameDimensions.height}
+                            fill="lightblue"
+                            stroke="blue"
+                          />
+                           {frameDimensions.hangerDistance.map((distance, index) => (
+                            // Display hole position
+                            <text
+                                key={`hole-text-${pos.id}-${index}`}
+                                x={pos.x + frameDimensions.width / 2}
+                                y={pos.y + distance}
+                                textAnchor="middle"
+                                dominantBaseline="middle"
+                                fontSize="2"
+                                fill="black"
+                            >
+                                Hole {index + 1} at ({(pos.x + frameDimensions.width / 2).toFixed(1)},
+                                {(pos.y + distance).toFixed(1)}) cm
+                            </text>
+                            ))}
+                        </g>
+                      ))}
+                      {/* Draw lines from hole positions to wall edges */}
+                      {holePositionsCalculated.map((hole, index) => (
+                        <g key={`hole-lines-${index}`}>
+                          {/* Line to left edge */}
+                          <line
+                            x1={hole.x}
+                            y1={hole.y}
+                            x2={0}
+                            y2={hole.y}
+                            stroke="gray"
+                            strokeDasharray="2,2"
+                          />
+                          <text x={hole.x / 2} y={hole.y - 1} fontSize="2" textAnchor="middle">
+                            {(hole.x).toFixed(1)} cm
                           </text>
-                          ))}
-                      </g>
-                    ))}
-                    {/* Draw lines from hole positions to wall edges */}
-                    {holePositionsCalculated.map((hole, index) => (
-                      <g key={`hole-lines-${index}`}>
-                        {/* Line to left edge */}
-                        <line
-                          x1={hole.x}
-                          y1={hole.y}
-                          x2={0}
-                          y2={hole.y}
-                          stroke="gray"
-                          strokeDasharray="2,2"
-                        />
-                        <text x={hole.x / 2} y={hole.y - 1} fontSize="2" textAnchor="middle">
-                          {(hole.x).toFixed(1)} cm
-                        </text>
-                        {/* Line to top edge */}
-                        <line
-                          x1={hole.x}
-                          y1={hole.y}
-                          x2={hole.x}
-                          y2={0}
-                          stroke="gray"
-                          strokeDasharray="2,2"
-                        />
-                        <text x={hole.x} y={hole.y / 2} fontSize="2" textAnchor="middle" transform={`rotate(-90 ${hole.x},${hole.y / 2})`}>
-                          {(hole.y).toFixed(1)} cm
-                        </text>
-                      </g>
-                    ))}
-                  </svg>
-                </TransformComponent>
-              </>
-            )}
-          </TransformWrapper>
-          <div className="mt-4">
-            <p>Hole Position Measurements:</p>
-            {holePositionsCalculated.length === 0 ? (
-              <p>No hole positions available.</p>
-            ) : (
-              <ul className="list-disc pl-5">
-                {holePositionsCalculated.map((pos, index) => (
-                  <li key={index}>
-                    Hole {index + 1}: X = {pos.x.toFixed(1)} cm, Y = {pos.y.toFixed(1)} cm (Frame ID: {pos.frameId}, Hanger Index: {pos.hangerIndex})
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        </>
-      ) : (
-        <p>Please define wall dimensions to see the preview.</p>
-      )}
+                          {/* Line to top edge */}
+                          <line
+                            x1={hole.x}
+                            y1={hole.y}
+                            x2={hole.x}
+                            y2={0}
+                            stroke="gray"
+                            strokeDasharray="2,2"
+                          />
+                          <text x={hole.x} y={hole.y / 2} fontSize="2" textAnchor="middle" transform={`rotate(-90 ${hole.x},${hole.y / 2})`}>
+                            {(hole.y).toFixed(1)} cm
+                          </text>
+                        </g>
+                      ))}
+                    </svg>
+                  </TransformComponent>
+                </>
+              )}
+            </TransformWrapper>
+          </>
+        ) : (
+          <p>Please define wall dimensions to see the preview.</p>
+        )}
+      </div>
     </div>
   );
 };
