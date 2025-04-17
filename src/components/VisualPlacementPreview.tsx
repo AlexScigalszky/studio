@@ -4,6 +4,16 @@ import {useEffect, useState} from "react";
 import {TransformWrapper, TransformComponent} from "react-zoom-pan-pinch";
 
 import {Card, CardContent} from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 interface VisualPlacementPreviewProps {
   frameDimensions: {
@@ -349,18 +359,35 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
                     Distribution: {distributionLabel}
                 </p>
                 <div className="mt-4">
-                    <p>Hole Position Measurements:</p>
-                    {holePositionsCalculated.length === 0 ? (
-                        <p>No hole positions available.</p>
-                    ) : (
-                        <ul className="list-disc pl-5">
-                            {holePositionsCalculated.map((pos, index) => (
-                                <li key={index}>
-                                    Hole {index + 1}: X = {pos.x.toFixed(1)} cm, Y = {pos.y.toFixed(1)} cm (Frame ID: {pos.frameId}, Hanger Index: {pos.hangerIndex})
-                                </li>
-                            ))}
-                        </ul>
-                    )}
+                    <Table>
+                        <TableCaption>Hole Position Measurements</TableCaption>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[100px]">Hole #</TableHead>
+                                <TableHead>X (cm)</TableHead>
+                                <TableHead>Y (cm)</TableHead>
+                                <TableHead>Frame ID</TableHead>
+                                <TableHead>Hanger Index</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {holePositionsCalculated.length === 0 ? (
+                                <TableRow>
+                                    <TableCell colSpan={5} className="text-center">No hole positions available.</TableCell>
+                                </TableRow>
+                            ) : (
+                                holePositionsCalculated.map((pos, index) => (
+                                    <TableRow key={index}>
+                                        <TableCell>{index + 1}</TableCell>
+                                        <TableCell>{pos.x.toFixed(1)}</TableCell>
+                                        <TableCell>{pos.y.toFixed(1)}</TableCell>
+                                        <TableCell>{pos.frameId}</TableCell>
+                                        <TableCell>{pos.hangerIndex}</TableCell>
+                                    </TableRow>
+                                ))
+                            )}
+                        </TableBody>
+                    </Table>
                 </div>
             </CardContent>
         </Card>
