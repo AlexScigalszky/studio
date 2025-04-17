@@ -28,40 +28,85 @@ export default function Home() {
   const [wallDimensions, setWallDimensions] = useState({width: 100, height: 100});
   const [selectedDistribution, setSelectedDistribution] = useState("Vertical Stack");
   const [holePositions, setHolePositions] = useState<{x: number; y: number;}[]>([]);
+  const searchParams = useSearchParams();
+  const tab = searchParams.get('tab');
+  const [activeTab, setActiveTab] = useState<string>(tab || "frame");
+  const router = useRouter();
+  const [frameTabComplete, setFrameTabComplete] = useState(true);
+  const [wallTabComplete, setWallTabComplete] = useState(false);
+  const [distributionTabComplete, setDistributionTabComplete] = useState(false);
+
+  useEffect(() => {
+    const tabFromParams = searchParams.get('tab');
+    if (tabFromParams) {
+      setActiveTab(tabFromParams);
+    }
+  }, [searchParams]);
+
+  const handleTabChange = (tab: string) => {
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.set('tab', tab);
+    router.push(`/?${newParams.toString()}`);
+    setActiveTab(tab);
+  };
 
   return (
-    <SidebarProvider>
-      <div className="flex h-screen">
-        <Sidebar className="w-80 border-r flex-none p-4">
-          <SidebarHeader>
-            <Label>Frame Configuration</Label>
+    <div className="container mx-auto p-4 max-w-4xl">
+      <h1 className="text-2xl font-bold mb-4">FrameIt</h1>
+      <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
+        <TabsList>
+          <TabsTrigger value="frame" disabled={false}>Frame</TabsTrigger>
+          <TabsTrigger value="wall" disabled={!frameTabComplete}>Wall</TabsTrigger>
+          <TabsTrigger value="distribution" disabled={!wallTabComplete}>Distribution</TabsTrigger>
+          <TabsTrigger value="preview" disabled={!distributionTabComplete}>Preview</TabsTrigger>
+        </TabsList>
+        <TabsContent value="frame">
+          <Card className="mb-4">
             <FrameConfiguration
               setFrameDimensions={setFrameDimensions}
               setHangerType={setHangerType}
+              onValid={() => {
+                setFrameTabComplete(true);
+                handleTabChange("wall");
+              }}
             />
-          </SidebarHeader>
-          <SidebarHeader>
-            <Label>Wall Dimensions</Label>
-            <WallAreaDefinition setWallDimensions={setWallDimensions} />
-          </SidebarHeader>
-          <SidebarHeader>
-            <Label>Distribution</Label>
-            <DistributionSelection setSelectedDistribution={setSelectedDistribution} />
-          </SidebarHeader>
-        </Sidebar>
-
-        <div className="flex-1 p-4">
-          <h1 className="text-2xl font-bold mb-4">Preview</h1>
-          <VisualPlacementPreview
-            frameDimensions={frameDimensions}
-            wallDimensions={wallDimensions}
-            selectedDistribution={selectedDistribution}
-            holePositions={holePositions}
-            setHolePositions={setHolePositions}
-          />
-          {/*<Toaster />*/}
-        </div>
-      </div>
-    </SidebarProvider>
+          </Card>
+        </TabsContent>
+        <TabsContent value="wall">
+          <Card className="mb-4">
+            <WallAreaDefinition
+              setWallDimensions={setWallDimensions}
+              onValid={() => {
+                setWallTabComplete(true);
+                handleTabChange("distribution");
+              }}
+            />
+          </Card>
+        </TabsContent>
+        <TabsContent value="distribution">
+          <Card className="mb-4">
+            <DistributionSelection
+              setSelectedDistribution={setSelectedDistribution}
+              onValid={() => {
+                setDistributionTabComplete(true);
+                handleTabChange("preview");
+              }}
+            />
+          </Card>
+        </TabsContent>
+        <TabsContent value="preview">
+          <Card className="mb-4">
+            <VisualPlacementPreview
+              frameDimensions={frameDimensions}
+              wallDimensions={wallDimensions}
+              selectedDistribution={selectedDistribution}
+              holePositions={holePositions}
+              setHolePositions={setHolePositions}
+            />
+          </Card>
+        </TabsContent>
+      </Tabs>
+      <Toaster />
+    </div>
   );
 }
