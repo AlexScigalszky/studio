@@ -3,18 +3,13 @@
 import {useState} from "react";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
-import {Button} from "@/components/ui/button";
-import {toast} from "@/hooks/use-toast";
-import {useRouter} from "next/navigation";
 
 interface WallAreaDefinitionProps {
   setWallDimensions: (dimensions: { width: number; height: number }) => void;
-  onValid: () => void;
 }
 
 export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
   setWallDimensions,
-  onValid
 }) => {
   const [width, setWidth] = useState<number>(100);
   const [height, setHeight] = useState<number>(100);
@@ -22,21 +17,12 @@ export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (width <= 0 || height <= 0) {
-      toast({
-        title: "Error!",
-        description: "Please enter valid wall dimensions.",
-        variant: "destructive",
-      });
-      return;
-    }
+      if (width <= 0 || height <= 0) {
+          alert("Please enter valid wall dimensions.");
+          return;
+      }
 
     setWallDimensions({width, height});
-    toast({
-      title: "Success!",
-      description: "Wall dimensions saved.",
-    });
-    onValid();
   };
 
   return (
@@ -59,7 +45,7 @@ export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
           onChange={(e) => setHeight(Number(e.target.value))}
         />
       </div>
-      <Button type="submit">Save Wall Dimensions</Button>
+      {/*<Button type="submit">Save Wall Dimensions</Button>*/}
     </form>
   );
 };

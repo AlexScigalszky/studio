@@ -3,11 +3,8 @@
 import {useState} from "react";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
-import {Button} from "@/components/ui/button";
-import {toast} from "@/hooks/use-toast";
 
 interface FrameConfigurationProps {
-  onValid: () => void;
   setFrameDimensions: (dimensions: {
     width: number;
     height: number;
@@ -18,7 +15,6 @@ interface FrameConfigurationProps {
 }
 
 export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
-  onValid,
   setFrameDimensions,
   setHangerType,
 }) => {
@@ -30,26 +26,18 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (width <= 0 || height <= 0 || depth <= 0) {
-      toast({
-        title: "Error!",
-        description: "Please enter valid frame dimensions.",
-        variant: "destructive",
-      });
-      return;
-    }
+
+      // Validate the input values
+      if (width <= 0 || height <= 0 || depth <= 0) {
+          alert("Please enter valid frame dimensions."); // Simple validation
+          return;
+      }
 
       // Parse hanger distances from comma-separated string to array of numbers
       const hangerDistanceArray = hangerDistances.split(',').map(Number);
 
     setFrameDimensions({width, height, depth, hangerDistance: hangerDistanceArray});
     setHangerType(hanger);
-
-    toast({
-      title: "Success!",
-      description: "Frame configuration saved.",
-    });
-    onValid();
   };
 
   return (
@@ -100,7 +88,7 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
             onChange={(e) => setHanger(e.target.value)}
           />
         </div>
-        <Button type="submit">Save Frame Configuration</Button>
+        {/*<Button type="submit">Save Frame Configuration</Button>*/}
       </form>
     
   );
