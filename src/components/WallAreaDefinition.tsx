@@ -3,13 +3,16 @@
 import {useState} from "react";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
+import {Button} from "@/components/ui/button";
 
 interface WallAreaDefinitionProps {
   setWallDimensions: (dimensions: { width: number; height: number }) => void;
+    onValid: () => void;
 }
 
 export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
   setWallDimensions,
+    onValid,
 }) => {
   const [width, setWidth] = useState<number>(100);
   const [height, setHeight] = useState<number>(100);
@@ -23,6 +26,7 @@ export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
       }
 
     setWallDimensions({width, height});
+      onValid();
   };
 
   return (
@@ -45,7 +49,7 @@ export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
           onChange={(e) => setHeight(Number(e.target.value))}
         />
       </div>
-      {/*<Button type="submit">Save Wall Dimensions</Button>*/}
+        <Button type="submit">Save Wall Dimensions</Button>
     </form>
   );
 };

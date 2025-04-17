@@ -3,6 +3,7 @@
 import {useState} from "react";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
+import {Button} from "@/components/ui/button";
 
 interface FrameConfigurationProps {
   setFrameDimensions: (dimensions: {
@@ -12,11 +13,13 @@ interface FrameConfigurationProps {
     hangerDistance: number[];
   }) => void;
   setHangerType: (type: string) => void;
+    onValid: () => void;
 }
 
 export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
   setFrameDimensions,
   setHangerType,
+    onValid,
 }) => {
   const [width, setWidth] = useState<number>(10);
   const [height, setHeight] = useState<number>(15);
@@ -38,6 +41,7 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
 
     setFrameDimensions({width, height, depth, hangerDistance: hangerDistanceArray});
     setHangerType(hanger);
+      onValid();
   };
 
   return (
@@ -88,7 +92,7 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
             onChange={(e) => setHanger(e.target.value)}
           />
         </div>
-        {/*<Button type="submit">Save Frame Configuration</Button>*/}
+          <Button type="submit">Save Frame Configuration</Button>
       </form>
     
   );
