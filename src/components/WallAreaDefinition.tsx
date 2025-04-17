@@ -16,14 +16,18 @@ export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
   setWallDimensions,
 }) => {
   const handleWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const width = Number(e.target.value);
-    setWallDimensions((prev: WallDimensions) => ({...prev, width}));
-  };
-  const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const height = Number(e.target.value);
+    const newWidth = Number(e.target.value);
     setWallDimensions((prev: WallDimensions) => ({
       ...prev,
-      height
+      width: newWidth
+    }));
+  };
+  const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newHeight = Number(e.target.value);
+    setWallDimensions((prev: WallDimensions) => ({
+      ...prev,
+      height: newHeight
+
     }));
   };
 
