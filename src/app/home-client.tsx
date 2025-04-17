@@ -18,18 +18,22 @@ export default function HomeClient() {
   const [holePositions, setHolePositions] = useState<{x: number; y: number;}[]>([]);
     const searchParams = useSearchParams();
     const tab = searchParams.get('tab');
-    const [activeTab, setActiveTab] = useState(tab || "frame");
+    const [activeTab, setActiveTab] = useState<string>(tab || "frame");
     const router = useRouter();
 
     useEffect(() => {
-        if (tab) {
-            setActiveTab(tab);
+        // Update activeTab state when the 'tab' search parameter changes
+        const tabFromParams = searchParams.get('tab');
+        if (tabFromParams) {
+            setActiveTab(tabFromParams);
         }
-    }, [tab]);
+    }, [searchParams]);
 
     const handleTabChange = (tab: string) => {
+        // Update the URL and activeTab state
+        const newURL = `/?tab=${tab}`;
+        router.push(newURL, { shallow: true }); // Use shallow routing to avoid full page reload
         setActiveTab(tab);
-        router.push(`/?tab=${tab}`);
     };
 
   return (
