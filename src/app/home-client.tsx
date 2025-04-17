@@ -16,51 +16,58 @@ export default function HomeClient() {
   const [wallDimensions, setWallDimensions] = useState({width: 100, height: 100});
   const [selectedDistribution, setSelectedDistribution] = useState("vertical");
   const [holePositions, setHolePositions] = useState<{x: number; y: number;}[]>([]);
-    const searchParams = useSearchParams();
-    const tab = searchParams.get('tab');
-    const [activeTab, setActiveTab] = useState<string>(tab || "frame");
-    const router = useRouter();
+  const searchParams = useSearchParams();
+  const tab = searchParams.get('tab');
+  const [activeTab, setActiveTab] = useState<string>(tab || "frame");
+  const router = useRouter();
+  const [frameTabComplete, setFrameTabComplete] = useState(false);
+  const [wallTabComplete, setWallTabComplete] = useState(false);
+  const [distributionTabComplete, setDistributionTabComplete] = useState(false);
 
-    useEffect(() => {
-        // Update activeTab state when the 'tab' search parameter changes
-        const tabFromParams = searchParams.get('tab');
-        if (tabFromParams) {
-            setActiveTab(tabFromParams);
-        }
-    }, [searchParams]);
+  useEffect(() => {
+    const tabFromParams = searchParams.get('tab');
+    if (tabFromParams) {
+      setActiveTab(tabFromParams);
+    }
+  }, [searchParams]);
 
-    const handleTabChange = (tab: string) => {
-        // Update the URL and activeTab state
-        const newParams = new URLSearchParams(searchParams.toString());
-        newParams.set('tab', tab);
-        router.push(`/?${newParams.toString()}`, { shallow: true }); // Use shallow routing to avoid full page reload
-        setActiveTab(tab);
-    };
+  const handleTabChange = (tab: string) => {
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.set('tab', tab);
+    router.push(`/?${newParams.toString()}`, { shallow: true });
+    setActiveTab(tab);
+  };
 
   return (
     <div className="container mx-auto p-4 max-w-4xl">
       <h1 className="text-2xl font-bold mb-4">FrameIt</h1>
       <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
         <TabsList>
-          <TabsTrigger value="frame">Frame</TabsTrigger>
-          <TabsTrigger value="wall">Wall</TabsTrigger>
-          <TabsTrigger value="distribution">Distribution</TabsTrigger>
-          <TabsTrigger value="preview">Preview</TabsTrigger>
+          <TabsTrigger value="frame" disabled={false}>Frame</TabsTrigger>
+          <TabsTrigger value="wall" disabled={!frameTabComplete}>Wall</TabsTrigger>
+          <TabsTrigger value="distribution" disabled={!wallTabComplete}>Distribution</TabsTrigger>
+          <TabsTrigger value="preview" disabled={!distributionTabComplete}>Preview</TabsTrigger>
         </TabsList>
         <TabsContent value="frame">
           <Card className="mb-4">
             <FrameConfiguration
               setFrameDimensions={setFrameDimensions}
               setHangerType={setHangerType}
-              onNext={() => handleTabChange("wall")}
+              onValid={() => {
+                setFrameTabComplete(true);
+                handleTabChange("wall");
+              }}
             />
           </Card>
         </TabsContent>
         <TabsContent value="wall">
           <Card className="mb-4">
             <WallAreaDefinition
-                setWallDimensions={setWallDimensions}
-                onNext={() => handleTabChange("distribution")}
+              setWallDimensions={setWallDimensions}
+              onValid={() => {
+                setWallTabComplete(true);
+                handleTabChange("distribution");
+              }}
             />
           </Card>
         </TabsContent>
@@ -68,7 +75,10 @@ export default function HomeClient() {
           <Card className="mb-4">
             <DistributionSelection
               setSelectedDistribution={setSelectedDistribution}
-              onNext={() => handleTabChange("preview")}
+              onValid={() => {
+                setDistributionTabComplete(true);
+                handleTabChange("preview");
+              }}
             />
           </Card>
         </TabsContent>

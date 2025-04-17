@@ -9,10 +9,10 @@ import {useRouter} from "next/navigation";
 
 interface DistributionSelectionProps {
   setSelectedDistribution: (distribution: string) => void;
-  onNext: () => void;
+  onValid: () => void;
 }
 
-export const DistributionSelection: React.FC<DistributionSelectionProps> = ({setSelectedDistribution, onNext}) => {
+export const DistributionSelection: React.FC<DistributionSelectionProps> = ({setSelectedDistribution, onValid}) => {
   const [distribution, setDistribution] = useState<string>("vertical");
   const router = useRouter();
 
@@ -31,7 +31,7 @@ export const DistributionSelection: React.FC<DistributionSelectionProps> = ({set
       title: "Success!",
       description: "Distribution selected.",
     });
-    onNext();
+    onValid();
   };
 
   return (

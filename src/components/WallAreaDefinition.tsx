@@ -9,12 +9,12 @@ import {useRouter} from "next/navigation";
 
 interface WallAreaDefinitionProps {
   setWallDimensions: (dimensions: { width: number; height: number }) => void;
-  onNext: () => void;
+  onValid: () => void;
 }
 
 export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
   setWallDimensions,
-  onNext
+  onValid
 }) => {
   const [width, setWidth] = useState<number>(100);
   const [height, setHeight] = useState<number>(100);
@@ -36,7 +36,7 @@ export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
       title: "Success!",
       description: "Wall dimensions saved.",
     });
-    onNext();
+    onValid();
   };
 
   return (
