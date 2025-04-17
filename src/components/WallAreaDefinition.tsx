@@ -4,17 +4,20 @@ import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 
 interface WallAreaDefinitionProps {
-  setWallDimensions: (dimensions: { width: number; height: number }) => void;
+  setWallDimensions: (dimensions: WallDimensions) => void;
+}
+
+interface WallDimensions {
+  width: number;
+  height: number;
 }
 
 export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
   setWallDimensions,
 }) => {
   const handleWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const width = Number(e.target.value);
-    setWallDimensions(prev => ({...prev, width}));
+    const width = Number(e.target.value);    setWallDimensions((prev: WallDimensions) => ({...prev, width}));
   };
-
   const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const height = Number(e.target.value);
     setWallDimensions(prev => ({...prev, height}));
