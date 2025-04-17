@@ -26,22 +26,22 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
 }) => {
   const handleWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const width = Number(e.target.value);
-    setFrameDimensions((prev: FrameDimensions) => ({...prev, width}));
+    setFrameDimensions((prev) => ({...prev, width}));
   };
 
   const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const height = Number(e.target.value);
-    setFrameDimensions((prev: FrameDimensions) => ({...prev, height}));
+    setFrameDimensions((prev) => ({...prev, height}));
   };
 
   const handleDepthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const depth = Number(e.target.value);
-    setFrameDimensions((prev: FrameDimensions) => ({...prev, depth}));
+    setFrameDimensions((prev) => ({...prev, depth}));
   };
 
   const handleHangerDistanceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const hangerDistances = e.target.value.split(',').map(Number);
-    setFrameDimensions((prev: FrameDimensions) => ({...prev, hangerDistance: hangerDistances}));
+    setFrameDimensions((prev) => ({...prev, hangerDistance: hangerDistances}));
   };
 
   const handleHangerTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
