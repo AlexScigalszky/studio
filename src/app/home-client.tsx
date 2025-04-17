@@ -3,7 +3,7 @@
 import {useState, useEffect} from "react";
 import {FrameConfiguration} from "@/components/FrameConfiguration";
 import {WallAreaDefinition} from "@/components/WallAreaDefinition";
-import {LayoutSelection} from "@/components/LayoutSelection";
+import {DistributionSelection} from "@/components/DistributionSelection";
 import {VisualPlacementPreview} from "@/components/VisualPlacementPreview";
 import {Card} from "@/components/ui/card";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
@@ -14,7 +14,7 @@ export default function HomeClient() {
   const [frameDimensions, setFrameDimensions] = useState({width: 10, height: 15, depth: 2, hangerDistance: [2]});
   const [hangerType, setHangerType] = useState("");
   const [wallDimensions, setWallDimensions] = useState({width: 100, height: 100});
-  const [selectedLayout, setSelectedLayout] = useState("vertical");
+  const [selectedDistribution, setSelectedDistribution] = useState("vertical");
   const [holePositions, setHolePositions] = useState<{x: number; y: number;}[]>([]);
     const searchParams = useSearchParams();
     const tab = searchParams.get('tab');
@@ -39,7 +39,7 @@ export default function HomeClient() {
         <TabsList>
           <TabsTrigger value="frame">Frame</TabsTrigger>
           <TabsTrigger value="wall">Wall</TabsTrigger>
-          <TabsTrigger value="layout">Layout</TabsTrigger>
+          <TabsTrigger value="distribution">Distribution</TabsTrigger>
           <TabsTrigger value="preview">Preview</TabsTrigger>
         </TabsList>
         <TabsContent value="frame">
@@ -55,14 +55,14 @@ export default function HomeClient() {
           <Card className="mb-4">
             <WallAreaDefinition
                 setWallDimensions={setWallDimensions}
-                onNext={() => handleTabChange("layout")}
+                onNext={() => handleTabChange("distribution")}
             />
           </Card>
         </TabsContent>
-        <TabsContent value="layout">
+        <TabsContent value="distribution">
           <Card className="mb-4">
-            <LayoutSelection
-              setSelectedLayout={setSelectedLayout}
+            <DistributionSelection
+              setSelectedDistribution={setSelectedDistribution}
               onNext={() => handleTabChange("preview")}
             />
           </Card>
@@ -72,7 +72,8 @@ export default function HomeClient() {
             <VisualPlacementPreview
               frameDimensions={frameDimensions}
               wallDimensions={wallDimensions}
-              selectedLayout={selectedLayout}
+              selectedDistribution={selectedDistribution}
+              holePositions={holePositions}
               setHolePositions={setHolePositions}
             />
           </Card>

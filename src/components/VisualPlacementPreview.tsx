@@ -12,14 +12,16 @@ interface VisualPlacementPreviewProps {
     hangerDistance: number[];
   };
   wallDimensions: {width: number; height: number};
-  selectedLayout: string;
+  selectedDistribution: string;
+  holePositions: {x: number; y: number}[];
   setHolePositions: (positions: {x: number; y: number}[]) => void;
 }
 
 export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
   frameDimensions,
   wallDimensions,
-  selectedLayout,
+  selectedDistribution,
+  holePositions,
   setHolePositions,
 }) => {
   const [framePositions, setFramePositions] = useState<{x: number; y: number; id: number}[]>(
@@ -30,11 +32,11 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
   >([]); // Renamed state variable
 
   useEffect(() => {
-    // Calculate frame positions based on selected layout and dimensions
+    // Calculate frame positions based on selected distribution and dimensions
     const calculatePositions = () => {
       const positions: {x: number; y: number; id: number}[] = [];
-      if (selectedLayout === "vertical") {
-        // Example: Vertical layout - frames stacked vertically in the center
+      if (selectedDistribution === "vertical") {
+        // Example: Vertical distribution - frames stacked vertically in the center
         const frameWidth = Math.min(frameDimensions.width, wallDimensions.width * 0.8);
         const frameHeight = Math.min(frameDimensions.height, wallDimensions.height * 0.4);
         const frameSpacing = 10; // Space between frames
@@ -45,8 +47,8 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
 
         positions.push({x: startX, y: startY, id: 1});
         positions.push({x: startX, y: startY + frameHeight + frameSpacing, id: 2});
-      } else if (selectedLayout === "horizontal") {
-        // Example: Horizontal layout - frames side by side in the center
+      } else if (selectedDistribution === "horizontal") {
+        // Example: Horizontal distribution - frames side by side in the center
         const frameWidth = Math.min(frameDimensions.width, wallDimensions.width * 0.4);
         const frameHeight = Math.min(frameDimensions.height, wallDimensions.height * 0.8);
         const frameSpacing = 10; // Space between frames
@@ -57,7 +59,7 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
 
         positions.push({x: startX, y: startY, id: 1});
         positions.push({x: startX + frameWidth + frameSpacing, y: startY, id: 2});
-      } else if (selectedLayout === "grid") {
+      } else if (selectedDistribution === "grid") {
         const frameWidth = Math.min(frameDimensions.width, wallDimensions.width * 0.4);
         const frameHeight = Math.min(frameDimensions.height, wallDimensions.height * 0.4);
         const frameSpacing = 10;
@@ -73,7 +75,7 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
           y: startY + frameHeight + frameSpacing,
           id: 4,
         });
-      } else if (selectedLayout === "diagonal") {
+      } else if (selectedDistribution === "diagonal") {
         const frameWidth = Math.min(frameDimensions.width, wallDimensions.width * 0.4);
         const frameHeight = Math.min(frameDimensions.height, wallDimensions.height * 0.4);
         const frameSpacing = 10;
@@ -81,15 +83,15 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
         const startX = (wallDimensions.width - (2 * frameWidth + frameSpacing)) / 2;
         const startY = (wallDimensions.height - (2 * frameHeight + frameSpacing)) / 2;
 
-        // Diagonal layout: Top-left to Bottom-right
+        // Diagonal distribution: Top-left to Bottom-right
         positions.push({x: startX, y: startY, id: 1});
         positions.push({
           x: startX + frameWidth + frameSpacing,
           y: startY + frameHeight + frameSpacing,
           id: 2,
         });
-      } else if (selectedLayout === "triangle") {
-        // Triangle layout: One at the top, two at the bottom
+      } else if (selectedDistribution === "triangle") {
+        // Triangle distribution: One at the top, two at the bottom
         const frameWidth = Math.min(frameDimensions.width, wallDimensions.width * 0.3);
         const frameHeight = Math.min(frameDimensions.height, wallDimensions.height * 0.3);
         const frameSpacing = 10;
@@ -103,8 +105,8 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
         const bottomStartX = wallDimensions.width / 4 - frameWidth / 2;
         positions.push({ x: bottomStartX, y: bottomStartY, id: 2 }); // Bottom left frame
         positions.push({ x: wallDimensions.width * 0.75 - frameWidth / 2, y: bottomStartY, id: 3 }); // Bottom right frame
-      } else if (selectedLayout === "staircase") {
-        // Staircase layout: Frames diagonally increasing in height
+      } else if (selectedDistribution === "staircase") {
+        // Staircase distribution: Frames diagonally increasing in height
         const frameWidth = Math.min(frameDimensions.width, wallDimensions.width * 0.3);
         const frameHeight = Math.min(frameDimensions.height, wallDimensions.height * 0.3);
         const frameSpacing = 10;
@@ -121,8 +123,8 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
         currentX += frameWidth + frameSpacing;
         currentY += frameHeight + frameSpacing;
         positions.push({ x: currentX, y: currentY, id: 3 });
-      } else if (selectedLayout === "fancy1") {
-          // Fancy layout 1: Overlapping frames
+      } else if (selectedDistribution === "fancy1") {
+          // Fancy distribution 1: Overlapping frames
           const frameWidth = Math.min(frameDimensions.width, wallDimensions.width * 0.4);
           const frameHeight = Math.min(frameDimensions.height, wallDimensions.height * 0.4);
           const frameSpacing = -15; // Negative spacing for overlap
@@ -132,8 +134,8 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
 
           positions.push({ x: startX, y: startY, id: 1 });
           positions.push({ x: startX + frameSpacing, y: startY + frameSpacing, id: 2 });
-      } else if (selectedLayout === "fancy2") {
-          // Fancy layout 2: Cluster at the top
+      } else if (selectedDistribution === "fancy2") {
+          // Fancy distribution 2: Cluster at the top
           const frameWidth = Math.min(frameDimensions.width, wallDimensions.width * 0.3);
           const frameHeight = Math.min(frameDimensions.height, wallDimensions.height * 0.3);
           const frameSpacing = 5;
@@ -144,7 +146,31 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
           positions.push({ x: startX, y: startY, id: 1 });
           positions.push({ x: startX + frameWidth + frameSpacing, y: startY, id: 2 });
           positions.push({ x: wallDimensions.width / 2 - frameWidth / 2, y: startY + frameHeight + frameSpacing, id: 3 });
+      } else if (selectedDistribution === "scattered") {
+        // Scattered distribution: Random positions
+        const numFrames = 4;
+        for (let i = 0; i < numFrames; i++) {
+          const frameWidth = Math.min(frameDimensions.width, wallDimensions.width * 0.3);
+          const frameHeight = Math.min(frameDimensions.height, wallDimensions.height * 0.3);
+          const startX = Math.random() * (wallDimensions.width - frameWidth);
+          const startY = Math.random() * (wallDimensions.height - frameHeight);
+          positions.push({ x: startX, y: startY, id: i + 1 });
+        }
+      } else if (selectedDistribution === "centered") {
+          // Centered distribution: Frames arranged around the center
+          const frameWidth = Math.min(frameDimensions.width, wallDimensions.width * 0.4);
+          const frameHeight = Math.min(frameDimensions.height, wallDimensions.height * 0.4);
+          const frameSpacing = 10;
+
+          const startX = wallDimensions.width / 2 - frameWidth / 2;
+          const startY = wallDimensions.height / 2 - frameHeight / 2;
+
+          positions.push({ x: startX, y: startY - frameHeight - frameSpacing, id: 1 }); // Top
+          positions.push({ x: startX, y: startY + frameHeight + frameSpacing, id: 2 }); // Bottom
+          positions.push({ x: startX - frameWidth - frameSpacing, y: startY, id: 3 }); // Left
+          positions.push({ x: startX + frameWidth + frameSpacing, y: startY, id: 4 }); // Right
       }
+
 
       setFramePositions(positions);
 
@@ -176,25 +202,28 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
       frameDimensions.height > 0 &&
       wallDimensions.width > 0 &&
       wallDimensions.height > 0 &&
-      selectedLayout
+      selectedDistribution
     ) {
       calculatePositions();
     }
-  }, [frameDimensions, wallDimensions, selectedLayout, setHolePositions]);
+  }, [frameDimensions, wallDimensions, selectedDistribution, setHolePositions]);
 
   return (
     <div className="w-full">
       <p className="mb-2">
         Visual Placement Preview: Frame Dimensions - Width:{frameDimensions.width}, Height:
         {frameDimensions.height}, Depth:{frameDimensions.depth}, Wall Dimensions - Width:
-        {wallDimensions.width}, Height:{wallDimensions.height}, Layout: {selectedLayout}
+        {wallDimensions.width}, Height:{wallDimensions.height}, Distribution: {selectedDistribution}
       </p>
       {wallDimensions.width > 0 && wallDimensions.height > 0 ? (
         <>
           <TransformWrapper
+              defaultScale={1}
               limitToBounds={false}
               minScale={0.5}
               maxScale={3}
+              wheel={{disabled: false}}
+              pan={{disabled: false}}
           >
             {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
               <>
