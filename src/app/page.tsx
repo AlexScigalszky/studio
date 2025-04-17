@@ -29,7 +29,7 @@ export default function Home() {
   return (
     <SidebarProvider>
       <div className="flex h-screen overflow-hidden">
-        <Sidebar className="w-80 border-r flex-shrink-0">
+        <Sidebar className="w-1/3 border-r flex-shrink-0">
           <SidebarHeader>
             <h2>Frame Configuration</h2>
           </SidebarHeader>
@@ -46,7 +46,7 @@ export default function Home() {
             />
           </SidebarContent>
         </Sidebar>
-        <div className="flex-1 p-4">
+        <div className="flex-1 p-4 w-2/3">
           <VisualPlacementPreview
             frameDimensions={frameDimensions}
             wallDimensions={wallDimensions}
