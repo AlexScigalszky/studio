@@ -2,7 +2,6 @@
 
 import {useEffect, useState} from "react";
 import {TransformWrapper, TransformComponent} from "react-zoom-pan-pinch";
-import {HolePositionMeasurement} from "@/components/HolePositionMeasurement";
 import {toast} from "@/hooks/use-toast";
 
 interface VisualPlacementPreviewProps {
@@ -31,22 +30,14 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
   const [holePositionsCalculated, setHolePositionsCalculated] = useState<
     {x: number; y: number, frameId: any, hangerIndex: number}[]
   >([]); // Renamed state variable
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     // Calculate frame positions based on selected distribution and dimensions
     const calculatePositions = () => {
-      setErrorMessage(null);
       const positions: {x: number; y: number; id: number}[] = [];
 
       const addFrame = (x: number, y: number, id: number) => {
-        if (x < 0 || x + frameDimensions.width > wallDimensions.width ||
-            y < 0 || y + frameDimensions.height > wallDimensions.height) {
-          setErrorMessage("Frame(s) do not fit within the wall dimensions. Please adjust frame and/or wall dimensions.");
-          return false;
-        }
         positions.push({x, y, id});
-        return true;
       };
       if (selectedDistribution === "Vertical Stack") {
         // Example: Vertical distribution - frames stacked vertically in the center
@@ -58,7 +49,8 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
         const startY = (wallDimensions.height - totalFramesHeight) / 2;
         const startX = (wallDimensions.width - frameWidth) / 2;
 
-        if (!addFrame(startX, startY, 1) || !addFrame(startX, startY + frameHeight + frameSpacing, 2)) return;
+        addFrame(startX, startY, 1)
+        addFrame(startX, startY + frameHeight + frameSpacing, 2)
       } else if (selectedDistribution === "Horizontal Row") {
         // Example: Horizontal distribution - frames side by side in the center
         const frameWidth = Math.min(frameDimensions.width, wallDimensions.width * 0.4);
@@ -68,7 +60,8 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
         const totalFramesWidth = frameWidth * 2 + frameSpacing;
         const startX = (wallDimensions.width - totalFramesWidth) / 2;
         const startY = (wallDimensions.height - frameHeight) / 2;
-        if (!addFrame(startX, startY, 1) || !addFrame(startX + frameWidth + frameSpacing, startY, 2)) return;
+        addFrame(startX, startY, 1)
+        addFrame(startX + frameWidth + frameSpacing, startY, 2)
 
       } else if (selectedDistribution === "Square Grid") {
         const frameWidth = Math.min(frameDimensions.width, wallDimensions.width * 0.4);
@@ -77,10 +70,10 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
 
         const startX = (wallDimensions.width - (2 * frameWidth + frameSpacing)) / 2;
         const startY = (wallDimensions.height - (2 * frameHeight + frameSpacing)) / 2;
-        if (!addFrame(startX, startY, 1) ||
-            !addFrame(startX + frameWidth + frameSpacing, startY, 2) ||
-            !addFrame(startX, startY + frameHeight + frameSpacing, 3) ||
-            !addFrame(startX + frameWidth + frameSpacing, startY + frameHeight + frameSpacing, 4)) return;
+        addFrame(startX, startY, 1)
+        addFrame(startX + frameWidth + frameSpacing, startY, 2)
+        addFrame(startX, startY + frameHeight + frameSpacing, 3)
+        addFrame(startX + frameWidth + frameSpacing, startY + frameHeight + frameSpacing, 4)
 
       } else if (selectedDistribution === "Diagonal Line") {
         const frameWidth = Math.min(frameDimensions.width, wallDimensions.width * 0.4);
@@ -91,8 +84,8 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
         const startY = (wallDimensions.height - (2 * frameHeight + frameSpacing)) / 2;
 
         // Diagonal distribution: Top-left to Bottom-right
-        if (!addFrame(startX, startY, 1) ||
-            !addFrame(startX + frameWidth + frameSpacing, startY + frameHeight + frameSpacing, 2)) return;
+        addFrame(startX, startY, 1)
+        addFrame(startX + frameWidth + frameSpacing, startY + frameHeight + frameSpacing, 2)
       } else if (selectedDistribution === "Triangular Arrangement") {
         // Triangle distribution: One at the top, two at the bottom
         const frameWidth = Math.min(frameDimensions.width, wallDimensions.width * 0.3);
@@ -101,12 +94,13 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
 
         const startX = wallDimensions.width / 2 - frameWidth / 2;
         const startY = wallDimensions.height * 0.2;
-        if (!addFrame(startX, startY, 1)) return; // Top frame
+        addFrame(startX, startY, 1) // Top frame
 
         const bottomStartY = wallDimensions.height * 0.6;
         const bottomStartX = wallDimensions.width / 4 - frameWidth / 2;
         const bottomEndX = wallDimensions.width * 0.75 - frameWidth / 2;
-        if (!addFrame(bottomStartX, bottomStartY, 2) || !addFrame(bottomEndX, bottomStartY, 3)) return; // Bottom right frame
+        addFrame(bottomStartX, bottomStartY, 2)
+        addFrame(bottomEndX, bottomStartY, 3) // Bottom right frame
       } else if (selectedDistribution === "Staircase Pattern") {
         // Staircase distribution: Frames diagonally increasing in height
         const frameWidth = Math.min(frameDimensions.width, wallDimensions.width * 0.3);
@@ -116,15 +110,15 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
         let currentX = wallDimensions.width * 0.2;
         let currentY = wallDimensions.height * 0.2;
 
-        if (!addFrame(currentX, currentY, 1)) return;
+        addFrame(currentX, currentY, 1)
 
         currentX += frameWidth + frameSpacing;
         currentY += frameHeight + frameSpacing;
-        if (!addFrame(currentX, currentY, 2)) return;
+        addFrame(currentX, currentY, 2)
 
         currentX += frameWidth + frameSpacing;
         currentY += frameHeight + frameSpacing;
-        if (!addFrame(currentX, currentY, 3)) return;
+        addFrame(currentX, currentY, 3)
       } else if (selectedDistribution === "Overlapping Frames") {
           // Fancy distribution 1: Overlapping frames
           const frameWidth = Math.min(frameDimensions.width, wallDimensions.width * 0.4);
@@ -134,7 +128,8 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
           const startX = wallDimensions.width / 2 - frameWidth / 2;
           const startY = wallDimensions.height / 2 - frameHeight / 2;
 
-        if (!addFrame(startX, startY, 1) || !addFrame(startX + frameSpacing, startY + frameSpacing, 2)) return;
+        addFrame(startX, startY, 1)
+        addFrame(startX + frameSpacing, startY + frameSpacing, 2)
       } else if (selectedDistribution === "Top Cluster") {
           // Fancy distribution 2: Cluster at the top
           const frameWidth = Math.min(frameDimensions.width, wallDimensions.width * 0.3);
@@ -143,20 +138,18 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
 
           const startX = wallDimensions.width / 3 - frameWidth / 2;
           const startY = wallDimensions.height * 0.1;
-        if (!addFrame(startX, startY, 1) ||
-            !addFrame(startX + frameWidth + frameSpacing, startY, 2) ||
-            !addFrame(wallDimensions.width / 2 - frameWidth / 2, startY + frameHeight + frameSpacing, 3)) return;
+        addFrame(startX, startY, 1)
+        addFrame(startX + frameWidth + frameSpacing, startY, 2)
+        addFrame(wallDimensions.width / 2 - frameWidth / 2, startY + frameHeight + frameSpacing, 3)
       } else if (selectedDistribution === "Scattered Display") {
         // Scattered distribution: Random positions
         const numFrames = 4;
         for (let i = 0; i < numFrames; i++) {
           const frameWidth = Math.min(frameDimensions.width, wallDimensions.width * 0.3);
           const frameHeight = Math.min(frameDimensions.height, wallDimensions.height * 0.3);
-          let startX, startY;
-          do {
-              startX = Math.random() * (wallDimensions.width - frameWidth);
-              startY = Math.random() * (wallDimensions.height - frameHeight);
-          } while (!addFrame(startX, startY, i + 1)); // Ensure it fits before proceeding
+          let startX = Math.random() * (wallDimensions.width - frameWidth);
+          let startY = Math.random() * (wallDimensions.height - frameHeight);
+          addFrame(startX, startY, i + 1)
         }
 
       } else if (selectedDistribution === "Centered Composition") {
@@ -167,10 +160,10 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
 
           const startX = wallDimensions.width / 2 - frameWidth / 2;
           const startY = wallDimensions.height / 2 - frameHeight / 2;
-          if (!addFrame(startX, startY - frameHeight - frameSpacing, 1) ||
-              !addFrame(startX, startY + frameHeight + frameSpacing, 2) ||
-              !addFrame(startX - frameWidth - frameSpacing, startY, 3) ||
-              !addFrame(startX + frameWidth + frameSpacing, startY, 4)) return; // Right
+          addFrame(startX, startY - frameHeight - frameSpacing, 1)
+          addFrame(startX, startY + frameHeight + frameSpacing, 2)
+          addFrame(startX - frameWidth - frameSpacing, startY, 3)
+          addFrame(startX + frameWidth + frameSpacing, startY, 4) // Right
       }
 
 
@@ -217,9 +210,6 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
         {frameDimensions.height}, Depth:{frameDimensions.depth}, Wall Dimensions - Width:
         {wallDimensions.width}, Height:{wallDimensions.height}, Distribution: {selectedDistribution}
       </p>
-        {errorMessage && (
-            <div className="text-red-500 mb-2">{errorMessage}</div>
-        )}
       {wallDimensions.width > 0 && wallDimensions.height > 0 ? (
         <>
           <TransformWrapper
@@ -314,7 +304,20 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
               </>
             )}
           </TransformWrapper>
-          <HolePositionMeasurement holePositions={holePositionsCalculated} />
+          <div className="mt-4">
+            <p>Hole Position Measurements:</p>
+            {holePositionsCalculated.length === 0 ? (
+              <p>No hole positions available.</p>
+            ) : (
+              <ul className="list-disc pl-5">
+                {holePositionsCalculated.map((pos, index) => (
+                  <li key={index}>
+                    Hole {index + 1}: X = {pos.x.toFixed(1)} cm, Y = {pos.y.toFixed(1)} cm (Frame ID: {pos.frameId}, Hanger Index: {pos.hangerIndex})
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </>
       ) : (
         <p>Please define wall dimensions to see the preview.</p>
