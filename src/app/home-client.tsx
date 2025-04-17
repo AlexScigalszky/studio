@@ -34,7 +34,7 @@ export default function HomeClient() {
   const handleTabChange = (tab: string) => {
     const newParams = new URLSearchParams(searchParams.toString());
     newParams.set('tab', tab);
-    router.push(`/?${newParams.toString()}`, { shallow: true });
+    router.push(`/?${newParams.toString()}`);
     setActiveTab(tab);
   };
 
