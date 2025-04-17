@@ -3,6 +3,13 @@
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 
+type FrameDimensions = {
+  width: number;
+  height: number;
+  depth: number;
+  hangerDistance: number[];
+};
+
 interface FrameConfigurationProps {
   setFrameDimensions: (dimensions: {
     width: number;
@@ -19,22 +26,22 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
 }) => {
   const handleWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const width = Number(e.target.value);
-    setFrameDimensions(prev => ({...prev, width}));
+    setFrameDimensions((prev: FrameDimensions) => ({...prev, width}));
   };
 
   const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const height = Number(e.target.value);
-    setFrameDimensions(prev => ({...prev, height}));
+    setFrameDimensions((prev: FrameDimensions) => ({...prev, height}));
   };
 
   const handleDepthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const depth = Number(e.target.value);
-    setFrameDimensions(prev => ({...prev, depth}));
+    setFrameDimensions((prev: FrameDimensions) => ({...prev, depth}));
   };
 
   const handleHangerDistanceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const hangerDistances = e.target.value.split(',').map(Number);
-    setFrameDimensions(prev => ({...prev, hangerDistance: hangerDistances}));
+    setFrameDimensions((prev: FrameDimensions) => ({...prev, hangerDistance: hangerDistances}));
   };
 
   const handleHangerTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
