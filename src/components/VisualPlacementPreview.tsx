@@ -239,7 +239,6 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
               minScale={0.5}
               maxScale={3}
               wheel={{disabled: false}}
-              pan={{disabled: false}}
           >
             {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
               <>
