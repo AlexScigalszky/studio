@@ -20,7 +20,7 @@ export default function Home() {
   return (
     <SidebarProvider>
       <div className="flex h-screen bg-background">
-        <Sidebar side="right" className="w-96 border-l">
+        <Sidebar side="right" className="w-1/4 border-l">
           <Card className="m-4">
             <h2 className="text-lg font-semibold mb-2">Frame Configuration</h2>
             <FrameConfiguration
@@ -41,7 +41,7 @@ export default function Home() {
             />
           </Card>
         </Sidebar>
-        <div className="flex-1 p-4 md:p-8">
+        <div className="flex-1 p-4 md:p-8 w-3/4">
           <VisualPlacementPreview
             frameDimensions={frameDimensions}
             wallDimensions={wallDimensions}
@@ -55,4 +55,3 @@ export default function Home() {
     </SidebarProvider>
   );
 }
-
