@@ -3,6 +3,8 @@
 import {useEffect, useState} from "react";
 import {TransformWrapper, TransformComponent} from "react-zoom-pan-pinch";
 
+import {Card, CardContent} from "@/components/ui/card";
+
 interface VisualPlacementPreviewProps {
   frameDimensions: {
     width: number;
@@ -235,34 +237,8 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
     const distributionLabel = distributionLabels[selectedDistribution] || selectedDistribution;
 
   return (
-    <div className="w-full flex flex-row">
-      <div className="w-2/5 p-4">
-        <p className="mb-2">
-          Visual Placement Preview:
-          <br />
-          Frame Dimensions - Width: {frameDimensions.width}, Height: {frameDimensions.height}, Depth: {frameDimensions.depth}
-          <br />
-          Wall Dimensions - Width: {wallDimensions.width}, Height: {wallDimensions.height}
-          <br />
-          Distribution: {distributionLabel}
-        </p>
-        <div className="mt-4">
-          <p>Hole Position Measurements:</p>
-          {holePositionsCalculated.length === 0 ? (
-            <p>No hole positions available.</p>
-          ) : (
-            <ul className="list-disc pl-5">
-              {holePositionsCalculated.map((pos, index) => (
-                <li key={index}>
-                  Hole {index + 1}: X = {pos.x.toFixed(1)} cm, Y = {pos.y.toFixed(1)} cm (Frame ID: {pos.frameId}, Hanger Index: {pos.hangerIndex})
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </div>
-
-      <div className="w-3/5">
+    <div className="w-full flex flex-col h-full">
+      <div className="w-full" style={{height: "60%"}}>
         {wallDimensions.width > 0 && wallDimensions.height > 0 ? (
           <>
             <TransformWrapper
@@ -360,7 +336,34 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
           <p>Please define wall dimensions to see the preview.</p>
         )}
       </div>
+
+        <Card className="w-full" style={{height: "40%"}}>
+            <CardContent>
+                <p className="mb-2">
+                    Visual Placement Preview:
+                    <br/>
+                    Frame Dimensions - Width: {frameDimensions.width}, Height: {frameDimensions.height}, Depth: {frameDimensions.depth}
+                    <br/>
+                    Wall Dimensions - Width: {wallDimensions.width}, Height: {wallDimensions.height}
+                    <br/>
+                    Distribution: {distributionLabel}
+                </p>
+                <div className="mt-4">
+                    <p>Hole Position Measurements:</p>
+                    {holePositionsCalculated.length === 0 ? (
+                        <p>No hole positions available.</p>
+                    ) : (
+                        <ul className="list-disc pl-5">
+                            {holePositionsCalculated.map((pos, index) => (
+                                <li key={index}>
+                                    Hole {index + 1}: X = {pos.x.toFixed(1)} cm, Y = {pos.y.toFixed(1)} cm (Frame ID: {pos.frameId}, Hanger Index: {pos.hangerIndex})
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
+            </CardContent>
+        </Card>
     </div>
   );
 };
-
