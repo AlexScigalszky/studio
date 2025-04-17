@@ -9,6 +9,7 @@ import {Sidebar } from "@/components/ui/sidebar";
 import {Card} from "@/components/ui/card";
 import {SidebarProvider} from "@/components/ui/sidebar";
 import {DistributionSelection} from "@/components/DistributionSelection";
+import {ScrollArea} from "@/components/ui/scroll-area";
 
 export default function Home() {
   const [frameDimensions, setFrameDimensions] = useState({width: 10, height: 15, depth: 2, hangerDistance: [2]});
@@ -21,6 +22,7 @@ export default function Home() {
     <SidebarProvider>
       <div className="flex h-screen bg-background">
         <Sidebar side="right" className="w-1/4 border-l">
+            <ScrollArea className="h-screen">
           <Card className="m-4">
             <h2 className="text-lg font-semibold mb-2">Frame Configuration</h2>
             <FrameConfiguration
@@ -40,6 +42,7 @@ export default function Home() {
               setSelectedDistribution={setSelectedDistribution}
             />
           </Card>
+            </ScrollArea>
         </Sidebar>
         <div className="flex-1 p-4 md:p-8 w-3/4">
           <VisualPlacementPreview
