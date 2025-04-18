@@ -35,24 +35,27 @@ export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
 
   return (
     <div className="grid gap-4">
-      <div>
-        <Label htmlFor="wallWidth">Width (cm)</Label>
-        <Input
-          type="number"
-          id="wallWidth"
-          value={width}
-          onChange={handleWidthChange}
-        />
-      </div>
-      <div>
-        <Label htmlFor="wallHeight">Height (cm)</Label>
-        <Input
-          type="number"
-          id="wallHeight"
-          value={height}
-          onChange={handleHeightChange}
-        />
+      <div className="flex space-x-4">
+        <div>
+          <Label htmlFor="wallWidth">Width (cm)</Label>
+          <Input
+            type="number"
+            id="wallWidth"
+            value={width}
+            onChange={handleWidthChange}
+          />
+        </div>
+        <div>
+          <Label htmlFor="wallHeight">Height (cm)</Label>
+          <Input
+            type="number"
+            id="wallHeight"
+            value={height}
+            onChange={handleHeightChange}
+          />
+        </div>
       </div>
     </div>
   );
 };
+
