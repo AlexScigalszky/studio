@@ -306,7 +306,7 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
 
   return (
     <div className="w-full flex flex-col h-full">
-      <div className="w-full" style={{height: "60%"}}>
+      <div className="w-full">
         {wallDimensions.width > 0 && wallDimensions.height > 0 ? (
           <>
             <TransformWrapper
