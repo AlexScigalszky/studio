@@ -1,10 +1,11 @@
 "use client";
 
 import {Input} from "@/components/ui/input";
+import { useState } from "react";
 import {Label} from "@/components/ui/label";
 
 interface WallAreaDefinitionProps {
-  setWallDimensions: (dimensions: WallDimensions) => void;
+  setWallDimensions: (dimensions: { width: number; height: number }) => void;
 }
 
 interface WallDimensions {
@@ -15,26 +16,22 @@ interface WallDimensions {
 export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
   setWallDimensions,
 }) => {
+  const [width, setWidth] = useState<number>(100);
+  const [height, setHeight] = useState<number>(100);
+
   const handleWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newWidth = Number(e.target.value);
-    setWallDimensions((prev: WallDimensions) => {
-      return {
-        ...prev,
-        width: newWidth,
-      };
-    });
+    setWidth(newWidth);
+    setWallDimensions({width:newWidth, height: height});
 
   };
   const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newHeight = Number(e.target.value);
-    setWallDimensions((prev: WallDimensions) => {
-      return{
-        ...prev,
-        height: newHeight,
-      };
-    });
+    setHeight(newHeight);
+    setWallDimensions({width: width, height: newHeight});
   };
   
+
 
   return (
     <div className="grid gap-4">
@@ -43,7 +40,7 @@ export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
         <Input
           type="number"
           id="wallWidth"
-          defaultValue={100}
+          value={width}
           onChange={handleWidthChange}
         />
       </div>
@@ -52,7 +49,7 @@ export const WallAreaDefinition: React.FC<WallAreaDefinitionProps> = ({
         <Input
           type="number"
           id="wallHeight"
-          defaultValue={100}
+          value={height}
           onChange={handleHeightChange}
         />
       </div>
