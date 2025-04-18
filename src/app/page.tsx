@@ -6,7 +6,6 @@ import {Toaster} from "@/components/ui/toaster";
 import {FrameConfiguration} from "@/components/FrameConfiguration";
 import {WallAreaDefinition} from "@/components/WallAreaDefinition";
 import {Sidebar } from "@/components/ui/sidebar";
-import {Card} from "@/components/ui/card";
 import {SidebarProvider} from "@/components/ui/sidebar";
 import {DistributionSelection} from "@/components/DistributionSelection";
 import {ScrollArea} from "@/components/ui/scroll-area";
@@ -23,25 +22,25 @@ export default function Home() {
       <div className="flex h-screen bg-background">
         <Sidebar side="right" className="w-1/4 border-l">
             <ScrollArea className="h-screen">
-          <Card className="m-4">
+          <div className="m-4">
             <h2 className="text-lg font-semibold mb-2">Frame Configuration</h2>
             <FrameConfiguration
               setFrameDimensions={setFrameDimensions}
               setHangerType={setHangerType}
             />
-          </Card>
-          <Card className="m-4">
+          </div>
+          <div className="m-4">
             <h2 className="text-lg font-semibold mb-2">Wall Dimensions</h2>
             <WallAreaDefinition
               setWallDimensions={setWallDimensions}
             />
-          </Card>
-          <Card className="m-4">
+          </div>
+          <div className="m-4">
             <h2 className="text-lg font-semibold mb-2">Distribution</h2>
             <DistributionSelection
               setSelectedDistribution={setSelectedDistribution}
             />
-          </Card>
+          </div>
             </ScrollArea>
         </Sidebar>
         <div className="flex-1 p-4 md:p-8 w-3/4">
