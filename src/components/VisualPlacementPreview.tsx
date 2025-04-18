@@ -2,6 +2,7 @@
 
 import {useEffect, useState} from "react";
 import {TransformWrapper, TransformComponent} from "react-zoom-pan-pinch";
+import {ZoomIn, ZoomOut} from "lucide-react";
 
 import {Card, CardContent} from "@/components/ui/card";
 import {
@@ -9,7 +10,6 @@ import {
   TableBody,
   TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -318,17 +318,6 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
             >
               {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
                 <>
-                  <div className="flex justify-center space-x-4 mb-2">
-                    <button onClick={() => zoomIn()} className="px-4 py-2 bg-gray-200 rounded">
-                      Zoom In
-                    </button>
-                    <button onClick={() => zoomOut()} className="px-4 py-2 bg-gray-200 rounded">
-                      Zoom Out
-                    </button>
-                    <button onClick={() => resetTransform()} className="px-4 py-2 bg-gray-200 rounded">
-                      Reset
-                    </button>
-                  </div>
                   <TransformComponent>
                     <svg
                       width="100%"
@@ -400,6 +389,14 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
                 </>
               )}
             </TransformWrapper>
+             <div className="flex justify-center space-x-4 mt-2">
+                    <button onClick={() => zoomIn()} className="px-4 py-2 bg-gray-200 rounded">
+                      <ZoomIn className="h-4 w-4"/>
+                    </button>
+                    <button onClick={() => zoomOut()} className="px-4 py-2 bg-gray-200 rounded">
+                        <ZoomOut className="h-4 w-4"/>
+                    </button>
+                  </div>
           </>
         ) : (
           <p>Please define wall dimensions to see the preview.</p>
