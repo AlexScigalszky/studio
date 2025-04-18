@@ -7,6 +7,22 @@ interface DistributionSelectionProps {
   setSelectedDistribution: (distribution: string) => void;
 }
 
+const distributionImages: { [key: string]: string } = {
+  "Vertical Stack": "https://picsum.photos/id/1015/50/50",
+  "Horizontal Row": "https://picsum.photos/id/1016/50/50",
+  "Square Grid": "https://picsum.photos/id/1018/50/50",
+  "Diagonal Line": "https://picsum.photos/id/1019/50/50",
+  "Triangular Arrangement": "https://picsum.photos/id/1020/50/50",
+  "Staircase Pattern": "https://picsum.photos/id/1021/50/50",
+  "Overlapping Frames": "https://picsum.photos/id/1022/50/50",
+  "Top Cluster": "https://picsum.photos/id/1023/50/50",
+  "Scattered Display": "https://picsum.photos/id/1024/50/50",
+  "Centered Composition": "https://picsum.photos/id/1025/50/50",
+  "Chaotic Cascade": "https://picsum.photos/id/1026/50/50",
+  "Spiral Out": "https://picsum.photos/id/1027/50/50",
+  "Random": "https://picsum.photos/id/1028/50/50",
+};
+
 export const DistributionSelection: React.FC<DistributionSelectionProps> = ({setSelectedDistribution}) => {
   return (
     <div className="grid gap-4">
@@ -14,54 +30,15 @@ export const DistributionSelection: React.FC<DistributionSelectionProps> = ({set
         <Label>Select Distribution</Label>
         <RadioGroup onValueChange={setSelectedDistribution}>
           <div className="flex flex-col space-y-2">
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="Vertical Stack" id="vertical" />
-              <Label htmlFor="vertical">Vertical Stack</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="Horizontal Row" id="horizontal" />
-              <Label htmlFor="horizontal">Horizontal Row</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="Square Grid" id="grid" />
-              <Label htmlFor="grid">Square Grid</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="Diagonal Line" id="diagonal" />
-              <Label htmlFor="diagonal">Diagonal Line</Label>
-            </div>
-              <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="Triangular Arrangement" id="triangle"/>
-                  <Label htmlFor="triangle">Triangular Arrangement</Label>
+            {Object.entries(distributionImages).map(([distribution, imageUrl]) => (
+              <div className="flex items-center space-x-2" key={distribution}>
+                <RadioGroupItem value={distribution} id={distribution} />
+                <Label htmlFor={distribution} className="flex items-center space-x-2">
+                  <span>{distribution}</span>
+                  <img src={imageUrl} alt={distribution} className="w-6 h-6 rounded-full" />
+                </Label>
               </div>
-              <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="Staircase Pattern" id="staircase"/>
-                  <Label htmlFor="staircase">Staircase Pattern</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="Overlapping Frames" id="fancy1"/>
-                  <Label htmlFor="fancy1">Overlapping Frames</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="Top Cluster" id="fancy2"/>
-                  <Label htmlFor="fancy2">Top Cluster</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="Scattered Display" id="scattered"/>
-                  <Label htmlFor="scattered">Scattered Display</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="Centered Composition" id="centered"/>
-                  <Label htmlFor="centered">Centered Composition</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="Chaotic Cascade" id="chaotic"/>
-                  <Label htmlFor="chaotic">Chaotic Cascade</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="Spiral Out" id="spiral"/>
-                  <Label htmlFor="spiral">Spiral Out</Label>
-              </div>
+            ))}
           </div>
         </RadioGroup>
       </div>
