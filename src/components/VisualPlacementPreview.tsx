@@ -44,6 +44,41 @@ const distributionLabels: { [key: string]: string } = {
     "Random": "Random"
 };
 
+// Function to check if two frames overlap
+const doFramesOverlap = (
+    frame1: { x: number; y: number; width: number; height: number },
+    frame2: { x: number; y: number; width: number; height: number }
+): boolean => {
+    return !(
+        frame1.x + frame1.width < frame2.x ||
+        frame1.x > frame2.x + frame2.width ||
+        frame1.y + frame1.height < frame2.y ||
+        frame1.y > frame2.y + frame2.height
+    );
+};
+
+// Function to adjust frame positions to avoid overlap
+const adjustFramePositions = (
+    positions: { x: number; y: number; id: number }[],
+    frameDimensions: { width: number; height: number }
+): { x: number; y: number; id: number }[] => {
+    const adjustedPositions = [...positions];
+
+    for (let i = 0; i < adjustedPositions.length; i++) {
+        for (let j = i + 1; j < adjustedPositions.length; j++) {
+            let frame1 = { ...adjustedPositions[i], width: frameDimensions.width, height: frameDimensions.height };
+            let frame2 = { ...adjustedPositions[j], width: frameDimensions.width, height: frameDimensions.height };
+
+            if (doFramesOverlap(frame1, frame2)) {
+                // Resolve overlap by moving the second frame
+                adjustedPositions[j].x = adjustedPositions[i].x + frameDimensions.width + 5; // Add a small spacing
+            }
+        }
+    }
+
+    return adjustedPositions;
+};
+
 export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
   frameDimensions,
   wallDimensions,
@@ -72,95 +107,114 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
       const wallWidth = wallDimensions.width;
       const wallHeight = wallDimensions.height;
 
+        // Calculate maximum number of frames based on wall size
+        const maxFrames = Math.floor((wallWidth * wallHeight) / (frameWidth * frameHeight));
+        let numFrames = 0;
+
       if (selectedDistribution === "Vertical Stack") {
           // Example: Vertical distribution - frames stacked vertically in the center
           const frameSpacing = 10; // Space between frames
+          numFrames = Math.min(2, maxFrames);
 
-          const totalFramesHeight = frameHeight * 2 + frameSpacing;
+          const totalFramesHeight = frameHeight * numFrames + frameSpacing * (numFrames - 1);
           const startY = (wallHeight - totalFramesHeight) / 2;
           const startX = (wallWidth - frameWidth) / 2;
 
-          addFrame(startX, startY, 1)
-          addFrame(startX, startY + frameHeight + frameSpacing, 2)
+          for (let i = 0; i < numFrames; i++) {
+              addFrame(startX, startY + i * (frameHeight + frameSpacing), i + 1);
+          }
+
       } else if (selectedDistribution === "Horizontal Row") {
           // Example: Horizontal distribution - frames side by side in the center
           const frameSpacing = 10; // Space between frames
+          numFrames = Math.min(2, maxFrames);
 
-          const totalFramesWidth = frameWidth * 2 + frameSpacing;
+          const totalFramesWidth = frameWidth * numFrames + frameSpacing * (numFrames - 1);
           const startX = (wallWidth - totalFramesWidth) / 2;
           const startY = (wallHeight - frameHeight) / 2;
-          addFrame(startX, startY, 1)
-          addFrame(startX + frameWidth + frameSpacing, startY, 2)
+
+          for (let i = 0; i < numFrames; i++) {
+              addFrame(startX + i * (frameWidth + frameSpacing), startY, i + 1);
+          }
+
 
       } else if (selectedDistribution === "Square Grid") {
+          numFrames = Math.min(4, maxFrames);
           const frameSpacing = 10;
 
           const startX = (wallWidth - (2 * frameWidth + frameSpacing)) / 2;
           const startY = (wallHeight - (2 * frameHeight + frameSpacing)) / 2;
-          addFrame(startX, startY, 1)
-          addFrame(startX + frameWidth + frameSpacing, startY, 2)
-          addFrame(startX, startY + frameHeight + frameSpacing, 3)
-          addFrame(startX + frameWidth + frameSpacing, startY + frameHeight + frameSpacing, 4)
+
+          if(numFrames >= 1) addFrame(startX, startY, 1)
+          if(numFrames >= 2) addFrame(startX + frameWidth + frameSpacing, startY, 2)
+          if(numFrames >= 3) addFrame(startX, startY + frameHeight + frameSpacing, 3)
+          if(numFrames >= 4) addFrame(startX + frameWidth + frameSpacing, startY + frameHeight + frameSpacing, 4)
+
 
       } else if (selectedDistribution === "Diagonal Line") {
+          numFrames = Math.min(2, maxFrames);
           const frameSpacing = 10;
 
           const startX = (wallWidth - (2 * frameWidth + frameSpacing)) / 2;
           const startY = (wallHeight - (2 * frameHeight + frameSpacing)) / 2;
 
           // Diagonal distribution: Top-left to Bottom-right
-          addFrame(startX, startY, 1)
-          addFrame(startX + frameWidth + frameSpacing, startY + frameHeight + frameSpacing, 2)
+          if(numFrames >= 1) addFrame(startX, startY, 1)
+          if(numFrames >= 2) addFrame(startX + frameWidth + frameSpacing, startY + frameHeight + frameSpacing, 2)
       } else if (selectedDistribution === "Triangular Arrangement") {
+          numFrames = Math.min(3, maxFrames);
           // Triangle distribution: One at the top, two at the bottom
           const frameSpacing = 10;
 
           const startX = wallWidth / 2 - frameWidth / 2;
           const startY = wallHeight * 0.2;
-          addFrame(startX, startY, 1) // Top frame
+          if(numFrames >= 1) addFrame(startX, startY, 1) // Top frame
 
           const bottomStartY = wallHeight * 0.6;
           const bottomStartX = wallWidth / 4 - frameWidth / 2;
           const bottomEndX = wallWidth * 0.75 - frameWidth / 2;
-          addFrame(bottomStartX, bottomStartY, 2)
-          addFrame(bottomEndX, bottomStartY, 3) // Bottom right frame
+          if(numFrames >= 2) addFrame(bottomStartX, bottomStartY, 2)
+          if(numFrames >= 3) addFrame(bottomEndX, bottomStartY, 3) // Bottom right frame
       } else if (selectedDistribution === "Staircase Pattern") {
+          numFrames = Math.min(3, maxFrames);
           // Staircase distribution: Frames diagonally increasing in height
           const frameSpacing = 10;
 
           let currentX = wallWidth * 0.2;
           let currentY = wallHeight * 0.2;
 
-          addFrame(currentX, currentY, 1)
+          if(numFrames >= 1) addFrame(currentX, currentY, 1)
 
           currentX += frameWidth + frameSpacing;
           currentY += frameHeight + frameSpacing;
-          addFrame(currentX, currentY, 2)
+          if(numFrames >= 2) addFrame(currentX, currentY, 2)
 
           currentX += frameWidth + frameSpacing;
           currentY += frameHeight + frameSpacing;
-          addFrame(currentX, currentY, 3)
+          if(numFrames >= 3) addFrame(currentX, currentY, 3)
       } else if (selectedDistribution === "Overlapping Frames") {
+          numFrames = Math.min(2, maxFrames);
           // Fancy distribution 1: Overlapping frames
           const frameSpacing = -15; // Negative spacing for overlap
 
           const startX = wallWidth / 2 - frameWidth / 2;
           const startY = wallHeight / 2 - frameHeight / 2;
 
-          addFrame(startX, startY, 1)
-          addFrame(startX + frameSpacing, startY + frameSpacing, 2)
+          if(numFrames >= 1) addFrame(startX, startY, 1)
+          if(numFrames >= 2) addFrame(startX + frameSpacing, startY + frameSpacing, 2)
       } else if (selectedDistribution === "Top Cluster") {
+          numFrames = Math.min(3, maxFrames);
           // Fancy distribution 2: Cluster at the top
           const frameSpacing = 5;
 
           const startX = wallWidth / 3 - frameWidth / 2;
           const startY = wallHeight * 0.1;
-          addFrame(startX, startY, 1)
-          addFrame(startX + frameWidth + frameSpacing, startY, 2)
-          addFrame(wallWidth / 2 - frameWidth / 2, startY + frameHeight + frameSpacing, 3)
+          if(numFrames >= 1) addFrame(startX, startY, 1)
+          if(numFrames >= 2) addFrame(startX + frameWidth + frameSpacing, startY, 2)
+          if(numFrames >= 3) addFrame(wallWidth / 2 - frameWidth / 2, startY + frameHeight + frameSpacing, 3)
       } else if (selectedDistribution === "Scattered Display") {
           // Scattered distribution: Random positions
-          const numFrames = 4;
+          numFrames = Math.min(4, maxFrames);
           for (let i = 0; i < numFrames; i++) {
               let startX = Math.random() * (wallWidth - frameWidth);
               let startY = Math.random() * (wallHeight - frameHeight);
@@ -168,17 +222,18 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
           }
 
       } else if (selectedDistribution === "Centered Composition") {
+          numFrames = Math.min(4, maxFrames);
           // Centered distribution: Frames arranged around the center
           const frameSpacing = 10;
 
           const startX = wallWidth / 2 - frameWidth / 2;
           const startY = wallHeight / 2 - frameHeight / 2;
-          addFrame(startX, startY - frameHeight - frameSpacing, 1)
-          addFrame(startX, startY + frameHeight + frameSpacing, 2)
-          addFrame(startX - frameWidth - frameSpacing, startY, 3)
-          addFrame(startX + frameWidth + frameSpacing, startY, 4) // Right
+          if(numFrames >= 1) addFrame(startX, startY - frameHeight - frameSpacing, 1)
+          if(numFrames >= 2) addFrame(startX, startY + frameHeight + frameSpacing, 2)
+          if(numFrames >= 3) addFrame(startX - frameWidth - frameSpacing, startY, 3)
+          if(numFrames >= 4) addFrame(startX + frameWidth + frameSpacing, startY, 4) // Right
       } else if (selectedDistribution === "Chaotic Cascade") {
-          const numFrames = 5;
+          numFrames = Math.min(5, maxFrames);
           for (let i = 0; i < numFrames; i++) {
               const startX = Math.random() * (wallWidth - frameWidth);
               const startY = Math.random() * (wallHeight - frameHeight);
@@ -186,9 +241,9 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
               addFrame(startX, startY, i + 1);
           }
       } else if (selectedDistribution === "Spiral Out") {
+          numFrames = Math.min(6, maxFrames);
           const centerX = wallWidth / 2;
           const centerY = wallHeight / 2;
-          const numFrames = 6;
           for (let i = 0; i < numFrames; i++) {
               const angle = i * (360 / numFrames); // Angle for each frame
               const distance = Math.min(wallWidth, wallHeight) * 0.3 * (i / numFrames); // Distance from the center
@@ -198,7 +253,7 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
           }
       }  else if (selectedDistribution === "Random") {
             // Scattered distribution: Random positions
-            const numFrames = 4;
+            numFrames = Math.min(4, maxFrames);
             for (let i = 0; i < numFrames; i++) {
                 let startX = Math.random() * (wallWidth - frameWidth);
                 let startY = Math.random() * (wallHeight - frameHeight);
@@ -206,6 +261,10 @@ export const VisualPlacementPreview: React.FC<VisualPlacementPreviewProps> = ({
             }
 
         }
+
+         // Adjust frame positions to prevent overlap
+         const adjustedPositions = adjustFramePositions(positions, frameDimensions);
+         setFramePositions(adjustedPositions);
 
 
       setFramePositions(positions);
