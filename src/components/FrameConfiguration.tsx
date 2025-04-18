@@ -20,13 +20,11 @@ interface FrameConfigurationProps {
 
 export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
   setFrameDimensions,
-  setHangerType,
 }) => {
   const [width, setWidth] = useState<number>(10);
   const [height, setHeight] = useState<number>(15);
   const [depth, setDepth] = useState<number>(2);
   const [hangerDistance, setHangerDistance] = useState<string>("2");
-  const [hangerType, setHanger] = useState<string>("");
 
   const handleWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newWidth = Number(e.target.value);
@@ -56,11 +54,6 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
       ...prev,
       hangerDistance: hangerDistances,
     }));
-  };
-
-  const handleHangerTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setHanger(e.target.value);
-    setHangerType(e.target.value);
   };
 
   return (
@@ -103,15 +96,6 @@ export const FrameConfiguration: React.FC<FrameConfigurationProps> = ({
           id="hangerDistance"
           value={hangerDistance}
           onChange={handleHangerDistanceChange}
-        />
-      </div>
-      <div>
-        <Label htmlFor="hanger">Hanger Type</Label>
-        <Input
-          type="text"
-          id="hanger"
-          value={hangerType}
-          onChange={handleHangerTypeChange}
         />
       </div>
     </div>

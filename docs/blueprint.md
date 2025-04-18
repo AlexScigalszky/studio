@@ -2,7 +2,7 @@
 
 ## Core Features:
 
-- Frame Configuration: Input frame dimensions (width, height, depth in cm) and hanger type.
+- Frame Configuration: Input frame dimensions (width, height, depth in cm).
 - Wall Area Definition: Define wall area dimensions for layout planning.
 - Layout Selection: Choose from pre-defined frame arrangements (e.g., vertical, horizontal, grid, diagonal).
 - Visual Placement Preview: Visually display the frame arrangement on the defined wall area, indicating hole positions.
